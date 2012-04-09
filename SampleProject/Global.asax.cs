@@ -7,9 +7,6 @@ using System.Web.Routing;
 
 namespace SampleProject
 {
-    // Примечание: Инструкции по включению классического режима IIS6 или IIS7 
-    // см. по ссылке http://go.microsoft.com/?LinkId=9394801
-
     public class MvcApplication : System.Web.HttpApplication
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
@@ -22,9 +19,9 @@ namespace SampleProject
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
-                "Default", // Имя маршрута
-                "{controller}/{action}/{id}", // URL-адрес с параметрами
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Параметры по умолчанию
+                "Default", 
+                "{controller}/{action}/{id}", 
+                new { controller = "Home", action = "Index", id = UrlParameter.Optional } 
             );
 
         }

@@ -1,0 +1,14 @@
+﻿@model SampleProject.ViewModels.User.LoginViewData
+@{
+    ViewBag.Title = "Login";
+}
+
+<h2>Login</h2>
+
+@using (Html.BeginForm("Login","User"))
+{
+    @Html.ValidationMessageFor(model => model.OpenIdUrl)<br/>
+    @Html.TextBoxFor(model => model.OpenIdUrl)
+    
+    <input type="submit" value="OK" />
+}
