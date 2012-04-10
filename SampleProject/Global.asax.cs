@@ -10,7 +10,7 @@ using System.Web.Security;
 
 using Ninject;
 using Ninject.Web.Common;
-
+using Ninject.Web.Mvc;
 using SampleProject.Models;
 using SampleProject.Models.Auth;
 
@@ -67,7 +67,7 @@ namespace SampleProject
 
         protected override void OnApplicationStarted()
         {
-            base.OnApplicationStarted();
+            
             InitDbCodeFirst();
 
             AreaRegistration.RegisterAllAreas();
@@ -78,7 +78,10 @@ namespace SampleProject
 
         protected override IKernel CreateKernel()
         {
-            return new StandardKernel(new MainNinjectModule());
+            var kernel = new StandardKernel();
+            kernel.Load(new MainNinjectModule());
+            return kernel;
         }
+
     }
 }

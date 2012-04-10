@@ -80,10 +80,6 @@
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.4.1.10331.0\lib\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.0.0.15\lib\net40\Ninject.dll</HintPath>
     </Reference>
@@ -121,7 +117,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\NinjectWebCommon.cs" />
+    <Compile Include="Common\DebugLogger.cs" />
+    <Compile Include="Common\ILogger.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
@@ -154,8 +151,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="App_Start\" />
     <Folder Include="Content\" />
-    <Folder Include="Infrastructure\" />
     <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>

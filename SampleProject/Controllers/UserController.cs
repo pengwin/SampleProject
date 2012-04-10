@@ -9,9 +9,12 @@ using DotNetOpenAuth.OpenId.RelyingParty;
 using DotNetOpenAuth.OpenId;
 using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OpenId.Extensions.SimpleRegistration;
+using Ninject;
 using SampleProject.Models;
 using SampleProject.Models.Auth;
 using SampleProject.ViewModels.User;
+
+using SampleProject.Common;
 
 namespace SampleProject.Controllers
 {
@@ -24,18 +27,20 @@ namespace SampleProject.Controllers
 
         #endregion
 
-        #region Private field
+        #region Private fields
 
         private readonly OpenIdRelyingParty _openId;
+        private readonly ILogger _logger;
 
         #endregion
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public UserController()
+        public UserController(ILogger logger)
         {
             _openId = new OpenIdRelyingParty();
+            _logger = logger;
         }
 
         #region Index
@@ -148,6 +153,7 @@ namespace SampleProject.Controllers
             // validate the openID url
             if (!Identifier.TryParse(openIdUrl, out id))
             {
+                _logger.Info("Invalid openId url: " + openIdUrl);
                 ModelState.AddModelError("OpenIdUrl", "The specified login identifier is invalid");
                 return View("Login");
             }
@@ -168,6 +174,7 @@ namespace SampleProject.Controllers
             }
             catch (ProtocolException e)
             {
+                _logger.Error("Open Id exception: " + e);
                 ModelState.AddModelError("OpenIdUrl", "OpenID Exception:" + e.Message);
             }
             return View("Login");
@@ -199,10 +206,12 @@ namespace SampleProject.Controllers
                     return RedirectToAction("Index","Home");
                     break;
                 case AuthenticationStatus.Canceled:
+                    _logger.Error("OpenId was canceled at provider. OpenId: " + response.ClaimedIdentifier);
                     ModelState.AddModelError("OpenIdUrl",
                                              "Login was cancelled at the provider");
                     break;
                 case AuthenticationStatus.Failed:
+                    _logger.Error("Login failed using the provided OpenID identifier: " + response.ClaimedIdentifier);
                     ModelState.AddModelError("OpenIdUrl",
                                              "Login failed using the provided OpenID identifier");
                     break;

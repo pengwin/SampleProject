@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-using Ninject.Modules;
+﻿using Ninject.Modules;
+using SampleProject.Common;
 
 namespace SampleProject
 {
+    /// <summary>
+    /// Binds all dependences in the application.
+    /// </summary>
     public class MainNinjectModule : NinjectModule
     {
         public override void Load()
         {
-            //throw new NotImplementedException();
+            Bind<ILogger>().To<DebugLogger>().InSingletonScope();
         }
     }
 }
