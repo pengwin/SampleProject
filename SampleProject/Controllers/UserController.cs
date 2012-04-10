@@ -38,7 +38,7 @@ namespace SampleProject.Controllers
         /// <summary>
         /// Constructor.
         /// </summary>
-        public UserController(ILogger logger,IUserRepository users)
+        public UserController(ILogger logger, IUserRepository users)
         {
             _openId = new OpenIdRelyingParty();
             _logger = logger;
@@ -111,7 +111,7 @@ namespace SampleProject.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult OpenId(string openIdUrl,string returnUrl)
+        public ActionResult OpenId(string openIdUrl, string returnUrl)
         {
             // get the openId response
             var response = _openId.GetResponse();
@@ -138,7 +138,7 @@ namespace SampleProject.Controllers
             {
                 var tt = returnUrl;
                 // process the response
-                return ProcessOpenIdResponse(response,returnUrl);
+                return ProcessOpenIdResponse(response, returnUrl);
             }
 
             return View();
@@ -168,7 +168,7 @@ namespace SampleProject.Controllers
                 request.AddExtension(new ClaimsRequest
                 {
                     Nickname = DemandLevel.Require,
-                    Email = DemandLevel.Request,
+                    Email = DemandLevel.Require,
                     FullName = DemandLevel.Require
                 });
                 // make request
@@ -182,12 +182,12 @@ namespace SampleProject.Controllers
             return View("Login");
         }
 
-        private ActionResult ProcessOpenIdResponse(IAuthenticationResponse response,string returnUrl)
+        private ActionResult ProcessOpenIdResponse(IAuthenticationResponse response, string returnUrl)
         {
             switch (response.Status)
             {
                 case AuthenticationStatus.Authenticated:
-                    
+
 
                     var identifier = response.ClaimedIdentifier;
 
@@ -198,22 +198,24 @@ namespace SampleProject.Controllers
 
                     if (openId == null)
                     {
-                        openId = new OpenId{OpenIdUrl = identifier};
                         // get requested fields
                         var claimsResponse = response.GetExtension<ClaimsResponse>();
 
-                        // create user
-                        user = new User();
-                        if (!string.IsNullOrEmpty(claimsResponse.Nickname)) user.Username = claimsResponse.Nickname + "";
-                        if (!string.IsNullOrEmpty(claimsResponse.Email)) user.Email = claimsResponse.Email + "";
-                        if (!string.IsNullOrEmpty(claimsResponse.FullName)) user.FullName = claimsResponse.FullName + "";
+                        // create a register view model
+                        var registerViewModel = new RegisterViewModel { OpenIdIdentifier = identifier, ReturnUrl = returnUrl};
+                        // get fancy name for the openId provider
+                        registerViewModel.OpenIdProviderName = Models.Auth.OpenId.GuessOpenIdFancyName(identifier);
 
-                        // bind user to openid
-                        openId.User = user;
+                        if (claimsResponse != null)
+                        {
+                            if (!string.IsNullOrEmpty(claimsResponse.Nickname)) registerViewModel.Username = claimsResponse.Nickname;
+                            if (!string.IsNullOrEmpty(claimsResponse.Email)) registerViewModel.Email = claimsResponse.Email;
+                            if (!string.IsNullOrEmpty(claimsResponse.FullName)) registerViewModel.FullName = claimsResponse.FullName;
+                        }
 
-                        // save openid
-                        _users.AddOpenId(openId);
-                        _users.SaveChanges();
+                        // show the register form
+                        return View("Register", registerViewModel);
+                        
                     }
                     else
                     {
@@ -226,7 +228,7 @@ namespace SampleProject.Controllers
                     {
                         return Redirect(returnUrl);
                     }
-                    return RedirectToAction("Index","Home");
+                    return RedirectToAction("Index", "Home");
                     break;
                 case AuthenticationStatus.Canceled:
                     _logger.Error("OpenId was canceled at provider. OpenId: " + response.ClaimedIdentifier);
@@ -246,10 +248,44 @@ namespace SampleProject.Controllers
 
         #region Register
 
-        public ActionResult Register()
+        /// <summary>
+        /// POST: /User/Register/
+        /// Gets response from registration form.
+        /// Creates users and ends auth process.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult Register(RegisterViewModel model)
         {
-            return View();
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // create openId
+            var openId = new OpenId {OpenIdUrl = model.OpenIdIdentifier};
+            // create user
+            var user = new User {Username = model.Username, FullName = model.FullName, Email = model.Email};
+
+            // bind user to openid
+            openId.User = user;
+
+            // save openid
+            _users.AddOpenId(openId);
+            _users.SaveChanges();
+
+            // set auth cookies
+            IssueFormsAuthenticationTicket(user);
+            
+            if (!string.IsNullOrEmpty(model.ReturnUrl))
+            {
+                return Redirect(model.ReturnUrl);
+            }
+            return View(model);
         }
+
+
 
         #endregion
 
