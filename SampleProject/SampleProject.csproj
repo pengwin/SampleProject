@@ -133,6 +133,7 @@
     <Compile Include="Models\UserContext.cs" />
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Models\UserRepository.cs" />
+    <Compile Include="MainNinjectModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\User\LoginViewData.cs" />
     <Compile Include="ViewModels\User\UserViewData.cs" />

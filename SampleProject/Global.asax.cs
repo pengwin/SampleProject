@@ -1,20 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
-using System.Linq;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
+
+using Ninject;
+using Ninject.Web.Common;
+
 using SampleProject.Models;
 using SampleProject.Models.Auth;
 
 namespace SampleProject
 {
-    public class MvcApplication : System.Web.HttpApplication
+    public class MvcApplication : NinjectHttpApplication
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
@@ -63,14 +65,20 @@ namespace SampleProject
             }
         }
 
-        protected void Application_Start()
+        protected override void OnApplicationStarted()
         {
+            base.OnApplicationStarted();
             InitDbCodeFirst();
 
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+        }
+
+        protected override IKernel CreateKernel()
+        {
+            return new StandardKernel(new MainNinjectModule());
         }
     }
 }
