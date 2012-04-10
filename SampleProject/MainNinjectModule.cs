@@ -1,5 +1,6 @@
 ﻿using Ninject.Modules;
 using SampleProject.Common;
+using SampleProject.Models;
 
 namespace SampleProject
 {
@@ -11,6 +12,8 @@ namespace SampleProject
         public override void Load()
         {
             Bind<ILogger>().To<DebugLogger>().InSingletonScope();
+            Bind<IUserRepository>().To<EfUserRepository>();
+
         }
     }
 }

@@ -7,14 +7,22 @@ using SampleProject.Models.Auth;
 
 namespace SampleProject.Models
 {
-    public class UserRepository
+    /// <summary>
+    /// User and OpenId entities repository.
+    /// Uses EnityFramework.
+    /// </summary>
+    public class EfUserRepository : IUserRepository
     {
-        private UserContext _userDb;
+        #region Private fields 
+
+        private readonly UserContext _userDb;
+
+        #endregion
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public UserRepository()
+        public EfUserRepository()
             : this(null)
         { }
 
@@ -22,7 +30,7 @@ namespace SampleProject.Models
         /// Constructor.
         /// </summary>
         /// <param name="userDb">UserContext.</param>
-        public UserRepository(UserContext userDb)
+        public EfUserRepository(UserContext userDb)
         {
             _userDb = userDb ?? new UserContext();
         }

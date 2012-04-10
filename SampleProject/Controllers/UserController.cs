@@ -18,7 +18,7 @@ using SampleProject.Common;
 
 namespace SampleProject.Controllers
 {
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         #region Consts
 
@@ -31,16 +31,18 @@ namespace SampleProject.Controllers
 
         private readonly OpenIdRelyingParty _openId;
         private readonly ILogger _logger;
+        private readonly IUserRepository _users;
 
         #endregion
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public UserController(ILogger logger)
+        public UserController(ILogger logger,IUserRepository users)
         {
             _openId = new OpenIdRelyingParty();
             _logger = logger;
+            _users = users;
         }
 
         #region Index
@@ -53,7 +55,7 @@ namespace SampleProject.Controllers
         [Authorize]
         public ActionResult Index()
         {
-
+            ViewData["Username"] = UserInfo.Username;
             return View();
         }
 
@@ -165,8 +167,8 @@ namespace SampleProject.Controllers
                 // request some additional data
                 request.AddExtension(new ClaimsRequest
                 {
-                    Nickname = DemandLevel.NoRequest,
-                    Email = DemandLevel.Require,
+                    Nickname = DemandLevel.Require,
+                    Email = DemandLevel.Request,
                     FullName = DemandLevel.Require
                 });
                 // make request
@@ -185,18 +187,39 @@ namespace SampleProject.Controllers
             switch (response.Status)
             {
                 case AuthenticationStatus.Authenticated:
-                    // get requested fields
-                    var claimsResponse = response.GetExtension<ClaimsResponse>();
+                    
 
-                    var user = new User()
+                    var identifier = response.ClaimedIdentifier;
+
+                    // try to load openid from database
+                    var openId = _users.GetOpenId(identifier);
+
+                    User user;
+
+                    if (openId == null)
                     {
-                        Username = response.ClaimedIdentifier,
-                        OpenIds = new List<OpenId>
-                                                         {
-                                                             new OpenId
-                                                                 {OpenIdUrl = response.ClaimedIdentifier}
-                                                         }
-                    };
+                        openId = new OpenId{OpenIdUrl = identifier};
+                        // get requested fields
+                        var claimsResponse = response.GetExtension<ClaimsResponse>();
+
+                        // create user
+                        user = new User();
+                        if (!string.IsNullOrEmpty(claimsResponse.Nickname)) user.Username = claimsResponse.Nickname + "";
+                        if (!string.IsNullOrEmpty(claimsResponse.Email)) user.Email = claimsResponse.Email + "";
+                        if (!string.IsNullOrEmpty(claimsResponse.FullName)) user.FullName = claimsResponse.FullName + "";
+
+                        // bind user to openid
+                        openId.User = user;
+
+                        // save openid
+                        _users.AddOpenId(openId);
+                        _users.SaveChanges();
+                    }
+                    else
+                    {
+                        user = openId.User;
+                    }
+
                     // set auth cookies
                     IssueFormsAuthenticationTicket(user);
                     if (!string.IsNullOrEmpty(returnUrl))

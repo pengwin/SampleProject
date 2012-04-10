@@ -119,6 +119,7 @@
   <ItemGroup>
     <Compile Include="Common\DebugLogger.cs" />
     <Compile Include="Common\ILogger.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
@@ -126,10 +127,11 @@
     </Compile>
     <Compile Include="Models\Auth\OpenId.cs" />
     <Compile Include="Models\Auth\OpenIdIdentity.cs" />
+    <Compile Include="Models\IUserRepository.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserContext.cs" />
     <Compile Include="Models\UserInfo.cs" />
-    <Compile Include="Models\UserRepository.cs" />
+    <Compile Include="Models\EfUserRepository.cs" />
     <Compile Include="MainNinjectModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\User\LoginViewData.cs" />
