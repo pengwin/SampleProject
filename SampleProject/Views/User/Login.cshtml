@@ -1,4 +1,5 @@
-﻿@model SampleProject.ViewModels.User.LoginViewData
+﻿@using SampleProject.ViewModels.User
+@model SampleProject.ViewModels.User.LoginViewData
 @{
     ViewBag.Title = "Login";
 }
@@ -8,7 +9,20 @@
 @using (Html.BeginForm("Login","User"))
 {
     @Html.ValidationMessageFor(model => model.OpenIdUrl)<br/>
-    @Html.TextBoxFor(model => model.OpenIdUrl)
     
-    <input type="submit" value="OK" />
+    <label for="google_login">Google</label>
+    @Html.RadioButtonFor(model => model.LoginMethod, LoginMethod.Google, new { id = "google_login" })<br/>
+
+    <label for="yandex_login">Yandex</label>  
+    @Html.RadioButtonFor(model => model.LoginMethod, LoginMethod.Yandex, new { id = "yandex_login" })<br/>
+
+    <label for="openid_login">OpenId</label>   
+    @Html.RadioButtonFor(model => model.LoginMethod, LoginMethod.OpenId, new { id = "openid_login" })<br/>
+
+    @Html.Label("Enter your openId:") 
+    @Html.TextBoxFor(model => model.OpenIdUrl)<br/>
+
+    @Html.HiddenFor(model => model.ReturnUrl)
+
+    <input type="submit" value="Login" />
 }
