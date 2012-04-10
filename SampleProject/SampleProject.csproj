@@ -125,6 +125,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\IRoleService.cs" />
+    <Compile Include="Infrastructure\UserRoleProvider.cs" />
+    <Compile Include="Infrastructure\UserRoleService.cs" />
     <Compile Include="Models\Auth\OpenId.cs" />
     <Compile Include="Models\Auth\OpenIdIdentity.cs" />
     <Compile Include="Models\IUserRepository.cs" />
@@ -133,6 +136,7 @@
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Models\EfUserRepository.cs" />
     <Compile Include="MainNinjectModule.cs" />
+    <Compile Include="Models\UserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\User\LoginViewData.cs" />
     <Compile Include="ViewModels\User\RegisterViewModel.cs" />
