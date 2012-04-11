@@ -10,8 +10,9 @@ using DotNetOpenAuth.OpenId;
 using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OpenId.Extensions.SimpleRegistration;
 using Ninject;
+using SampleProject.Authentication;
 using SampleProject.Models;
-using SampleProject.Models.Auth;
+using SampleProject.Models.UserModels;
 using SampleProject.ViewModels.User;
 
 using SampleProject.Common;
@@ -29,16 +30,17 @@ namespace SampleProject.Controllers
 
         #region Private fields
 
+        private readonly IUserRepository _users;
         private readonly OpenIdRelyingParty _openId;
         private readonly ILogger _logger;
-        private readonly IUserRepository _users;
 
         #endregion
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public UserController(ILogger logger, IUserRepository users)
+        public UserController(ILogger logger, IUserRepository users, IUserAuthService userAuth)
+            : base(userAuth)
         {
             _openId = new OpenIdRelyingParty();
             _logger = logger;
@@ -55,7 +57,20 @@ namespace SampleProject.Controllers
         [Authorize]
         public ActionResult Index()
         {
+
+            //var tt = HttpContext.User.IsInRole("tt");
             ViewData["Username"] = UserInfo.Username;
+            return View();
+        }
+
+        /// <summary>
+        /// GET: /User/
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public ActionResult Test()
+        {
             return View();
         }
 
@@ -88,18 +103,30 @@ namespace SampleProject.Controllers
             switch (loginData.LoginMethod)
             {
                 case LoginMethod.Google:
-                    return RedirectToAction("OpenId", "User", new { openIdUrl = GoogleOpenId, returnUrl });
+                    return RedirectToAction("OpenIdLogin", "User", new { openIdUrl = GoogleOpenId, returnUrl });
                 case LoginMethod.Yandex:
-                    return RedirectToAction("OpenId", "User", new { openIdUrl = YandexOpenId, returnUrl });
+                    return RedirectToAction("OpenIdLogin", "User", new { openIdUrl = YandexOpenId, returnUrl });
                 case LoginMethod.OpenId:
-                    return RedirectToAction("OpenId", "User", new { openIdUrl = loginData.OpenIdUrl, returnUrl });
+                    return RedirectToAction("OpenIdLogin", "User", new { openIdUrl = loginData.OpenIdUrl, returnUrl });
             }
             return View();
         }
 
         #endregion
 
-        #region OpenId
+        /// <summary>
+        /// GET: /User/Logout
+        /// Logout the current user.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult Logout()
+        {
+            UserAuthService.Logout();
+            return RedirectToAction("Index", "Home");
+        }
+
+        #region OpenIdLogin
 
         /// <summary>
         /// GET: /User/OpenId
@@ -111,7 +138,7 @@ namespace SampleProject.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public ActionResult OpenId(string openIdUrl, string returnUrl)
+        public ActionResult OpenIdLogin(string openIdUrl, string returnUrl)
         {
             // get the openId response
             var response = _openId.GetResponse();
@@ -182,21 +209,24 @@ namespace SampleProject.Controllers
             return View("Login");
         }
 
+        /// <summary>
+        /// Processes the response from OpenId server.
+        /// </summary>
+        /// <param name="response"></param>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         private ActionResult ProcessOpenIdResponse(IAuthenticationResponse response, string returnUrl)
         {
             switch (response.Status)
             {
                 case AuthenticationStatus.Authenticated:
 
-
                     var identifier = response.ClaimedIdentifier;
 
                     // try to load openid from database
-                    var openId = _users.GetOpenId(identifier);
+                    var user = _users.GetUserByOpenId(identifier);
 
-                    User user;
-
-                    if (openId == null)
+                    if (user == null)
                     {
                         // get requested fields
                         var claimsResponse = response.GetExtension<ClaimsResponse>();
@@ -204,7 +234,7 @@ namespace SampleProject.Controllers
                         // create a register view model
                         var registerViewModel = new RegisterViewModel { OpenIdIdentifier = identifier, ReturnUrl = returnUrl};
                         // get fancy name for the openId provider
-                        registerViewModel.OpenIdProviderName = Models.Auth.OpenId.GuessOpenIdFancyName(identifier);
+                        registerViewModel.OpenIdProviderName = Models.UserModels.OpenId.GuessOpenIdFancyName(identifier);
 
                         if (claimsResponse != null)
                         {
@@ -214,31 +244,25 @@ namespace SampleProject.Controllers
                         }
 
                         // show the register form
-                        return View("Register", registerViewModel);
-                        
-                    }
-                    else
-                    {
-                        user = openId.User;
+                        return View("Register", registerViewModel);  
                     }
 
+
                     // set auth cookies
-                    IssueFormsAuthenticationTicket(user);
+                    UserAuthService.LoginUser(user);
                     if (!string.IsNullOrEmpty(returnUrl))
                     {
                         return Redirect(returnUrl);
                     }
                     return RedirectToAction("Index", "Home");
-                    break;
+
                 case AuthenticationStatus.Canceled:
                     _logger.Error("OpenId was canceled at provider. OpenId: " + response.ClaimedIdentifier);
-                    ModelState.AddModelError("OpenIdUrl",
-                                             "Login was cancelled at the provider");
+                    ModelState.AddModelError("OpenIdUrl","Login was cancelled at the provider");
                     break;
                 case AuthenticationStatus.Failed:
                     _logger.Error("Login failed using the provided OpenID identifier: " + response.ClaimedIdentifier);
-                    ModelState.AddModelError("OpenIdUrl",
-                                             "Login failed using the provided OpenID identifier");
+                    ModelState.AddModelError("OpenIdUrl","Login failed using the provided OpenID identifier");
                     break;
             }
             return View("Login");
@@ -263,20 +287,23 @@ namespace SampleProject.Controllers
                 return View(model);
             }
 
-            // create openId
-            var openId = new OpenId {OpenIdUrl = model.OpenIdIdentifier};
             // create user
             var user = new User {Username = model.Username, FullName = model.FullName, Email = model.Email};
-
-            // bind user to openid
-            openId.User = user;
-
-            // save openid
-            _users.AddOpenId(openId);
-            _users.SaveChanges();
-
+            try
+            {
+                _users.CreateUserWithOpenId(model.OpenIdIdentifier, user);
+                _users.SaveChanges();
+            }
+            catch (CreateUserException ex)
+            {
+                ModelState.AddModelError("OpenIdIdentifier",ex.Message);
+            }
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
             // set auth cookies
-            IssueFormsAuthenticationTicket(user);
+            UserAuthService.LoginUser(user);
             
             if (!string.IsNullOrEmpty(model.ReturnUrl))
             {
@@ -285,33 +312,6 @@ namespace SampleProject.Controllers
             return View(model);
         }
 
-
-
-        #endregion
-
-        #region IssueFormsAuthenticationTicket
-        /// <summary>
-        /// Issues the FormsAuthenticationTicket to let ASP.NET know that a user is logged in.
-        /// </summary>
-        /// <param name="user">User that has logged in.</param>
-        private void IssueFormsAuthenticationTicket(User user)
-        {
-            // We need to make a FormsAuthenticationTicket.
-            // To store UserInfo data in it we use the 2nd overload.
-            var ticket = new FormsAuthenticationTicket(1,
-                user.Username,
-                DateTime.Now,
-                DateTime.Now.AddDays(14),
-                true,
-                UserInfo.FromUser(user).ToString(),
-                FormsAuthentication.FormsCookiePath);
-
-            // Now we encrypt the ticket so no one can read it...
-            string encTicket = FormsAuthentication.Encrypt(ticket);
-
-            // ...make a cookie and add it. ASP.NET will now know that our user is logged in.
-            Response.Cookies.Add(new HttpCookie(FormsAuthentication.FormsCookieName, encTicket));
-        }
         #endregion
 
     }

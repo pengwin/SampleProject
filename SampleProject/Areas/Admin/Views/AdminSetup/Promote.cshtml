@@ -1,0 +1,37 @@
+﻿@model SampleProject.Models.UserModels.User
+@{
+    ViewBag.Title = "Promote";
+}
+
+<h2>Promote to Admin</h2>
+
+User has been promoted.
+
+<fieldset title="User Data">
+    
+    <p>Name: @Model.Username</p>
+    <p>Email: @Model.Email</p>
+    <p>Full Name: @Model.FullName</p>
+
+    OpenIDs:
+    <ul>
+        @foreach( var openid in Model.OpenIds)
+        {
+            <li>
+                <p>Provider: @openid.ProviderName</p>
+                <p>OpenId: @openid.OpenIdUrl</p>
+            </li>
+        }
+    </ul>
+
+    Roles:
+    <ul>
+        @foreach( var role in Model.Roles)
+        {
+            <li>@role.RoleName</li>
+        }
+    </ul>
+</fieldset>
+
+
+

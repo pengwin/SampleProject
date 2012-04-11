@@ -1,0 +1,25 @@
+﻿@using SampleProject.Areas.Admin.ViewModels.AdminSetup
+@model List<IndexViewModel>
+@{
+    ViewBag.Title = "AdminSetup";
+}
+
+<h2>AdminSetup</h2>
+
+No admin exists.
+
+Choose a user from list to promote him to admin.
+
+@foreach( var user in Model)
+{
+    <p>UserId: @user.UserId</p>
+    <p>Username: @user.Username</p>
+    <p>OpenId: @user.OpenId</p>
+    @Html.ActionLink("Promote", "Promote", new { userId = user.UserId })
+}
+
+
+
+
+
+

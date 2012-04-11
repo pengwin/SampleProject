@@ -11,8 +11,8 @@ using System.Web.Security;
 using Ninject;
 using Ninject.Web.Common;
 using Ninject.Web.Mvc;
+using SampleProject.Authentication;
 using SampleProject.Models;
-using SampleProject.Models.Auth;
 
 namespace SampleProject
 {
@@ -29,10 +29,9 @@ namespace SampleProject
 
             routes.MapRoute(
                 "Default", 
-                "{controller}/{action}/{id}", 
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional } 
-            );
-
+                "{controller}/{action}/{id}",
+                new { controller = "Home", action = "Index", id = UrlParameter.Optional }, new[] { "SampleProject.Controllers" }
+                );
         }
 
         private void InitDbCodeFirst()
@@ -40,29 +39,22 @@ namespace SampleProject
             string connectionString = ConfigurationManager.ConnectionStrings["UserContext"].ConnectionString;
             var connectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0", "", connectionString);
             Database.DefaultConnectionFactory = connectionFactory;
-            Database.SetInitializer<UserContext>(new DropCreateDatabaseIfModelChanges<UserContext>());
+            //Database.SetInitializer<UserContext>(new DropCreateDatabaseIfModelChanges<UserContext>());
+            Database.SetInitializer<UserContext>(new DropCreateDatabaseAlways<UserContext>());
         }
+
+        private IUserAuthService _userInfoService;
 
         public override void Init()
         {
+            _userInfoService = new UserAuthService();
             this.PostAuthenticateRequest += new EventHandler(MvcApplication_PostAuthenticateRequest);
             base.Init();
         }
 
         void MvcApplication_PostAuthenticateRequest(object sender, EventArgs e)
         {
-            HttpCookie authCookie = HttpContext.Current.Request.Cookies[FormsAuthentication.FormsCookieName];
-            if (authCookie != null)
-            {
-                string encTicket = authCookie.Value;
-                if (!String.IsNullOrEmpty(encTicket))
-                {
-                    var ticket = FormsAuthentication.Decrypt(encTicket);
-                    var id = new OpenIdIdentity(ticket);
-                    var principal = new GenericPrincipal(id, null);
-                    HttpContext.Current.User = principal;
-                }
-            }
+            _userInfoService.SetCurrentUserInfo();
         }
 
         protected override void OnApplicationStarted()
