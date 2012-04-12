@@ -1,0 +1,37 @@
+﻿@model SampleProject.Models.UserModels.Role
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Role</legend>
+
+    <div class="display-label">RoleName</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.RoleName)
+    </div>
+    
+    <div class="display-label">Users:</div>
+    @foreach(var user in Model.Users)
+    {
+        <div class="display-label">Name</div>
+        <div class="display-field">
+            @Html.DisplayFor(model => user.Username)
+        </div>
+        <div class="display-label">Email</div>
+        <div class="display-field">
+            @Html.DisplayFor(model => user.Email)
+        </div>
+        <div class="display-label">FullName</div>
+        <div class="display-field">
+            @Html.DisplayFor(model => user.FullName)
+        </div>
+    }
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.RoleId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -39,8 +39,8 @@ namespace SampleProject
             string connectionString = ConfigurationManager.ConnectionStrings["UserContext"].ConnectionString;
             var connectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0", "", connectionString);
             Database.DefaultConnectionFactory = connectionFactory;
-            //Database.SetInitializer<UserContext>(new DropCreateDatabaseIfModelChanges<UserContext>());
-            Database.SetInitializer<UserContext>(new DropCreateDatabaseAlways<UserContext>());
+            Database.SetInitializer<UserContext>(new DropCreateDatabaseIfModelChanges<UserContext>());
+            //Database.SetInitializer<UserContext>(new DropCreateDatabaseAlways<UserContext>());
         }
 
         private IUserAuthService _userInfoService;

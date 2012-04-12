@@ -22,14 +22,16 @@ namespace SampleProject.Models.UserModels
             }
         }
 
-        [Required]
-        public int UserId { get; set; }
 
         /// <summary>
         /// OpenId provider fancy name
         /// </summary>
         [NotMapped]
         public string ProviderName { get; private set; }
+
+
+        [Required]
+        public int UserId { get; set; }
 
         public virtual User User { get; set; }
 

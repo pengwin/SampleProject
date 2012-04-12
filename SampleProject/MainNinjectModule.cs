@@ -16,6 +16,8 @@ namespace SampleProject
 
             Bind<IUserRepository>().To<UserRepository>();
             Bind<IRoleRepository>().To<RoleRepository>();
+            Bind<IBlueprintRepository>().To<BlueprintRepository>();
+            Bind<UserContext>().To<UserContext>();
 
             Bind<IUserAuthService>().To<UserAuthService>();
         }

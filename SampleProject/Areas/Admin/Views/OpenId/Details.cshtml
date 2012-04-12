@@ -1,0 +1,31 @@
+﻿@model SampleProject.Models.UserModels.OpenId
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>OpenId</legend>
+
+    <div class="display-label">OpenIdUrl</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.OpenIdUrl)
+    </div>
+
+    <div class="display-label">User</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.User.Username)
+    </div>
+
+    <div class="display-label">ProviderName</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ProviderName)
+    </div>
+    
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.OpenIdId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

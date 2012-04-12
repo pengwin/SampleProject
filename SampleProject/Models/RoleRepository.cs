@@ -32,17 +32,10 @@ namespace SampleProject.Models
         /// <summary>
         /// Constructor.
         /// </summary>
-        public RoleRepository()
-            : this(null)
-        { }
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         /// <param name="userDb">UserContext.</param>
         public RoleRepository(UserContext userDb)
         {
-            _userDb = userDb ?? new UserContext();
+            _userDb = userDb;
         }
 
         /// <summary>

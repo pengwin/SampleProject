@@ -31,17 +31,10 @@ namespace SampleProject.Models
         /// <summary>
         /// Constructor.
         /// </summary>
-        public UserRepository()
-            : this(null)
-        { }
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
         /// <param name="userDb">UserContext.</param>
         public UserRepository(UserContext userDb)
         {
-            _userDb = userDb ?? new UserContext();
+            _userDb = userDb;
         }
 
         /// <summary>
@@ -157,8 +150,5 @@ namespace SampleProject.Models
             else
                 throw new Exception("Cannot delete the last OpenID identifier. Every user account has to be associated with at least on OpenID.");
         }
-
-
-
     }
 }

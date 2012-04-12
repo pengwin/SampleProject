@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using SampleProject.Models.BlueprintModels;
 using SampleProject.Models.UserModels;
 
 namespace SampleProject.Models
@@ -21,5 +22,6 @@ namespace SampleProject.Models
         public DbSet<User> Users { get; set; }
         public DbSet<OpenId> OpenIds { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Blueprint> Blueprints { get; set; }
     }
 }

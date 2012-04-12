@@ -76,7 +76,7 @@ namespace SampleProject.Authentication
         /// </summary>
         public void Logout()
         {
-            HttpContext.Current.Response.Cookies.Remove(FormsAuthentication.FormsCookieName);
+            FormsAuthentication.SignOut();
         }
     }
 

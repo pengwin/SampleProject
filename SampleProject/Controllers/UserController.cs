@@ -86,7 +86,7 @@ namespace SampleProject.Controllers
         [HttpGet]
         public ActionResult Login(string returnUrl)
         {
-            return View(new LoginViewData { ReturnUrl = returnUrl });
+            return View(new LoginViewModel { ReturnUrl = returnUrl });
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace SampleProject.Controllers
         /// <param name="loginData"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult Login(LoginViewData loginData)
+        public ActionResult Login(LoginViewModel loginData)
         {
             var returnUrl = loginData.ReturnUrl ?? Url.Action("Index");
             switch (loginData.LoginMethod)
@@ -114,6 +114,7 @@ namespace SampleProject.Controllers
 
         #endregion
 
+        #region Logout
         /// <summary>
         /// GET: /User/Logout
         /// Logout the current user.
@@ -125,6 +126,7 @@ namespace SampleProject.Controllers
             UserAuthService.Logout();
             return RedirectToAction("Index", "Home");
         }
+        #endregion
 
         #region OpenIdLogin
 

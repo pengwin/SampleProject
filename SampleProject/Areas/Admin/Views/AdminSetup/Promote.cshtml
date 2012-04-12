@@ -7,31 +7,62 @@
 
 User has been promoted.
 
-<fieldset title="User Data">
-    
-    <p>Name: @Model.Username</p>
-    <p>Email: @Model.Email</p>
-    <p>Full Name: @Model.FullName</p>
+<fieldset>
+    <legend>User</legend>
 
-    OpenIDs:
+    <div class="display-label">Username</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Username)
+    </div>
+
+    <div class="display-label">Email</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Email)
+    </div>
+
+    <div class="display-label">FullName</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.FullName)
+    </div>
+    <div class="display-label">OpenIds:</div>
     <ul>
-        @foreach( var openid in Model.OpenIds)
-        {
-            <li>
-                <p>Provider: @openid.ProviderName</p>
-                <p>OpenId: @openid.OpenIdUrl</p>
-            </li>
-        }
+        <li>
+            @foreach( var openId in Model.OpenIds)
+            {
+                <fieldset>
+                    <legend>@Html.DisplayFor(model => openId.ProviderName)</legend>
+
+                    <div class="display-label">OpenIdUrl</div>
+                    <div class="display-field">
+                        @Html.DisplayFor(model => openId.OpenIdUrl)
+                    </div>
+                </fieldset>
+            }
+        </li>
     </ul>
-
-    Roles:
+    
+    <div class="display-label">Roles:</div>
     <ul>
-        @foreach( var role in Model.Roles)
-        {
-            <li>@role.RoleName</li>
-        }
+        <li>
+            @foreach( var role in Model.Roles)
+            {
+                <fieldset>
+                    <legend>Role</legend>
+
+                    <div class="display-label">Name</div>
+                    <div class="display-field">
+                        @Html.DisplayFor(model => role.RoleName)
+                    </div>
+
+                </fieldset>
+            }
+        </li>
     </ul>
 </fieldset>
+
+<p>
+    @Html.ActionLink("Back to admin panel", "Index", "Home", new { Area = "Admin" }, new { }))
+</p>
 
 
 
