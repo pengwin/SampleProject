@@ -1,0 +1,41 @@
+﻿@model SampleProject.ViewModels.Blueprints.FindViewModel
+
+@{
+    var tt = Model;
+}
+
+@using (Html.BeginForm("Find","Blueprints")) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>FindViewModel</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.BlueprintName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.BlueprintName)
+            @Html.ValidationMessageFor(model => model.BlueprintName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.BlueprintAuthor)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.BlueprintAuthor)
+            @Html.ValidationMessageFor(model => model.BlueprintAuthor)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.BlueprintDescription)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.BlueprintDescription)
+            @Html.ValidationMessageFor(model => model.BlueprintDescription)
+        </div>
+
+        <p>
+            <input type="submit" value="Search" />
+        </p>
+    </fieldset>
+}
+

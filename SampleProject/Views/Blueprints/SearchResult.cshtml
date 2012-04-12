@@ -1,0 +1,23 @@
+﻿@using SampleProject.HtmlHelpers
+@model List<SampleProject.Models.BlueprintSearchResult>
+           
+@{
+    ViewBag.Title = "Find";
+}
+
+<style>
+    i {
+        background-color: yellow;
+    }
+</style>
+<h2>Search results:</h2>
+
+@foreach( var result in Model)
+{
+    <p>Name</p>
+    @Html.HighlightPattern(result.NameResult.Value,result.NameResult.Pattern,"i")
+    <p>Author</p>
+    @Html.HighlightPattern(result.AuthorResult.Value, result.AuthorResult.Pattern, "i")
+    <p>Description</p>
+    @Html.HighlightPattern(result.DescriptionResult.Value, result.DescriptionResult.Pattern, "i")
+}

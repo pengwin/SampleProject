@@ -136,6 +136,7 @@
     </Compile>
     <Compile Include="Authentication\IUserAuthService.cs" />
     <Compile Include="Authentication\UserAuthService.cs" />
+    <Compile Include="HtmlHelpers\HighlightPattern.cs" />
     <Compile Include="Models\BlueprintModels\Blueprint.cs" />
     <Compile Include="Models\BlueprintRepository.cs" />
     <Compile Include="Models\BlueprintSearchService.cs" />
