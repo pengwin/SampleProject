@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using SampleProject.Authentication;
 using SampleProject.Authentication.Models;
+using SampleProject.Common;
 using SampleProject.Models;
 
 namespace SampleProject.Controllers
@@ -16,6 +17,7 @@ namespace SampleProject.Controllers
 
         protected IUserAuthService UserAuthService;
         protected UserInfo UserInfo;
+        protected ILogger Logger;
 
         #endregion
 
@@ -23,9 +25,10 @@ namespace SampleProject.Controllers
         /// Constructor.
         /// </summary>
         /// <param name="userAuthService"></param>
-        protected BaseController(IUserAuthService userAuthService)
+        protected BaseController(IUserAuthService userAuthService,ILogger logger)
         {
             UserAuthService = userAuthService;
+            Logger = logger;
         }
 
         #region Initialize

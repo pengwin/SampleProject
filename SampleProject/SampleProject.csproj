@@ -130,6 +130,7 @@
     <Compile Include="Common\DebugLogger.cs" />
     <Compile Include="Common\ILogger.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BlueprintAjaxController.cs" />
     <Compile Include="Controllers\BlueprintController.cs" />
     <Compile Include="Controllers\EditorController.cs" />
     <Compile Include="Controllers\BrowserController.cs" />
@@ -140,6 +141,7 @@
     </Compile>
     <Compile Include="Authentication\IUserAuthService.cs" />
     <Compile Include="Authentication\UserAuthService.cs" />
+    <Compile Include="HtmlHelpers\AbsoluteAction.cs" />
     <Compile Include="HtmlHelpers\HighlightPattern.cs" />
     <Compile Include="Models\BlueprintModels\Blueprint.cs" />
     <Compile Include="Models\BlueprintSearch\BlueprintSearchResult.cs" />
@@ -162,6 +164,7 @@
     <Compile Include="Models\UserModels\Role.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\Blueprint\CreateViewModel.cs" />
+    <Compile Include="ViewModels\BlueprintAjax\BlueprintJsonModel.cs" />
     <Compile Include="ViewModels\Editor\IndexViewModel.cs" />
     <Compile Include="ViewModels\Browser\FindViewModel.cs" />
     <Compile Include="ViewModels\User\LoginViewModel.cs" />
@@ -181,8 +184,15 @@
     <Content Include="Content\openid\img\openid.gif" />
     <Content Include="Content\openid\img\yandex.gif" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\Editor\App\Router.js" />
+    <Content Include="Scripts\Editor\Models\CanvasModel.js" />
+    <Content Include="Scripts\Editor\Models\EllipseModel.js" />
+    <Content Include="Scripts\Editor\Models\BlueprintModel.js" />
+    <Content Include="Scripts\Editor\Models\RectangleModel.js" />
     <Content Include="Scripts\json2.js" />
+    <Content Include="Scripts\Lib\Backbone\backbone.js" />
     <Content Include="Scripts\Lib\jQuery\jquery-1.7.1.js" />
+    <Content Include="Scripts\Lib\Underscore\underscore.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -324,7 +334,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>58170</DevelopmentServerPort>
+          <DevelopmentServerPort>61495</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

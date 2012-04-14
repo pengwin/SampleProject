@@ -10,6 +10,9 @@
 {
     <fieldset>
         <legend>Blueprint</legend>
+        <div style="color: red;">
+                @Html.ValidationSummary()<br/>
+            </div>
         <label>
             Name
             @Html.EditorFor(model=>model.Name)

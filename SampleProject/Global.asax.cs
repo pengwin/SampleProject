@@ -29,17 +29,49 @@ namespace SampleProject
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+            "BlueprintCreate",
+            "Ajax/Blueprint/",
+            new { controller = "BlueprintAjax", action = "Create" },
+            new { httpMethod = new HttpMethodConstraint("POST") }
+            );
+
+            routes.MapRoute(
+           "BlueprintRead",
+           "Ajax/Blueprint/{id}",
+           new { controller = "BlueprintAjax", action = "Read" },
+           new { httpMethod = new HttpMethodConstraint("GET") }
+           );
+
+            routes.MapRoute(
+            "BlueprintUpdate",
+            "Ajax/Blueprint/{id}",
+            new { controller = "BlueprintAjax", action = "Update" },
+            new { httpMethod = new HttpMethodConstraint("PUT") }
+            );
+
+
+
+
+
+            /* routes.MapRoute(
+            "Blueprint_default",
+            "Ajax/Blueprint/{id}",
+            new { controller = "BlueprintAjax", action = "Blueprint", id = UrlParameter.Optional }
+            );*/
+
+            routes.MapRoute(
               "Editor_default",
               "Editor/{id}",
               new { controller = "Editor", action = "Index", id = UrlParameter.Optional }
               );
 
+
             routes.MapRoute(
-                "Default", 
+                "Default",
                 "{controller}/{action}/{id}",
                 new { controller = "Home", action = "Index", id = UrlParameter.Optional }, new[] { "SampleProject.Controllers" }
                 );
-           
+
         }
 
         private void InitDbCodeFirst()
@@ -47,8 +79,8 @@ namespace SampleProject
             string connectionString = ConfigurationManager.ConnectionStrings["DatabaseContext"].ConnectionString;
             var connectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0", "", connectionString);
             Database.DefaultConnectionFactory = connectionFactory;
-            //Database.SetInitializer<DatabaseContext>(new DropCreateDatabaseIfModelChanges<DatabaseContext>());
-            Database.SetInitializer<DatabaseContext>(new DropCreateDatabaseAlways<DatabaseContext>());
+            Database.SetInitializer<DatabaseContext>(new DropCreateDatabaseIfModelChanges<DatabaseContext>());
+            //Database.SetInitializer<DatabaseContext>(new DropCreateDatabaseAlways<DatabaseContext>());
         }
 
         private IUserAuthService _userInfoService;
@@ -73,7 +105,7 @@ namespace SampleProject
 
         protected override void OnApplicationStarted()
         {
-            
+
             InitDbCodeFirst();
 
             AreaRegistration.RegisterAllAreas();

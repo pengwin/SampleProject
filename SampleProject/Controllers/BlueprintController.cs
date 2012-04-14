@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using SampleProject.Authentication;
+using SampleProject.Common;
 using SampleProject.Models.BlueprintModels;
 using SampleProject.Models.Repositories;
 using SampleProject.ViewModels.Blueprint;
@@ -17,7 +18,7 @@ namespace SampleProject.Controllers
     {
         private readonly IBlueprintRepository _blueprints;
 
-        public BlueprintController(IBlueprintRepository blueprints,IUserAuthService authService) : base(authService)
+        public BlueprintController(IBlueprintRepository blueprints,IUserAuthService authService,ILogger logger) : base(authService,logger)
         {
             _blueprints = blueprints;
         }
@@ -31,10 +32,15 @@ namespace SampleProject.Controllers
         [HttpPost]
         public ActionResult Create(CreateViewModel model)
         {
-            var blueprint = new Blueprint {Name = model.Name, Description = model.Description, Changed = DateTime.Now};
-            _blueprints.CreateBlueprintForUser(UserInfo.UserId,blueprint);
-            _blueprints.SaveChanges();
-            return RedirectToAction("Index", "User");
+            if (ModelState.IsValid)
+            {
+                var blueprint = new Blueprint
+                                    {Name = model.Name, Description = model.Description, Changed = DateTime.Now};
+                _blueprints.CreateBlueprintForUser(UserInfo.UserId, blueprint);
+                _blueprints.SaveChanges();
+                return RedirectToAction("Index", "User");
+            }
+            return View(model);
         }
 
         [HttpGet]

@@ -1,10 +1,17 @@
-﻿@model SampleProject.ViewModels.Editor.IndexViewModel
-           
+﻿@using SampleProject.HtmlHelpers
+@model SampleProject.ViewModels.Editor.IndexViewModel
 @{
     ViewBag.Title = "Index";
 }
 <script src="../../Scripts/Lib/jQuery/jquery-1.7.1.js" type="text/javascript"></script>
 <script src="../../Scripts/json2.js" type="text/javascript"></script>
+<script src="../../Scripts/Lib/Underscore/underscore.js" type="text/javascript"></script>
+<script src="../../Scripts/Lib/Backbone/backbone.js" type="text/javascript"></script>
+<script src="../../Scripts/Editor/App/Router.js" type="text/javascript"></script>
+<script src="../../Scripts/Editor/Models/CanvasModel.js" type="text/javascript"></script>
+<script src="../../Scripts/Editor/Models/RectangleModel.js" type="text/javascript"></script>
+<script src="../../Scripts/Editor/Models/EllipseModel.js" type="text/javascript"></script>
+<script src="../../Scripts/Editor/Models/BlueprintModel.js" type="text/javascript"></script>
 <script>
     window.config =
         {
@@ -12,37 +19,121 @@
             blueprintId : @Model.BlueprintId
         };
 </script>
-
 <script type="text/javascript">
 
-    var testitem = {
-      Test: 'test',
-      Message: 'message',
-      TempList: [ 10, 20]
+    // place api key in header of request
+    $.ajaxSetup({ headers: { 'apiKey': config.apiKey} });
+
+    var blueprint = new BlueprintModel();
+    blueprint.set('Name', 'Test');
+
+    var updateRects = function () {
+        $("#rect_count").html("Rectangles: " + blueprint.rectangles.length);
+        var str = "";
+        for (var i = 0; i < blueprint.rectangles.length; i++) {
+            str += "<li><a href='#'>Rect #" + (i + 1) + "</a></li>";
+        }
+        $("#rect_nav").html(str);
     };
+
+    var updateEllipses = function () {
+        $("#ellipse_count").html("Ellipses: " + blueprint.ellipses.length);
+        var str = "";
+        for (var i = 0; i < blueprint.ellipses.length; i++) {
+            str += "<li><a href='#'>Ellipse #" + (i + 1) + "</a></li>";
+        }
+        $("#ellipse_nav").html(str);
+    };
+
+    var updateCanvas = function () {
+        if (!blueprint.isNew()) {
+            $("#canvas_nav").html("<a href='#" + blueprint.get('id') + "/canvas'>Canvas</a>"); 
+        } else {
+            $("#canvas_nav").html("<a href='#/canvas'>Canvas</a>");
+        }
+
+    };
+
+
+    blueprint.canvas.on("change", updateCanvas);
+    
+
+    blueprint.rectangles.on("add", updateRects);
+    blueprint.rectangles.on("remove", updateRects);
+    blueprint.rectangles.on("reset", updateRects);
+
+
+    blueprint.ellipses.on("add", updateEllipses);
+    blueprint.ellipses.on("remove", updateEllipses);
+    blueprint.ellipses.on("reset", updateEllipses);
+
+    // Instantiate the router
+    var app_router = new AppRouter;
+    app_router.blueprint = blueprint;
+    // Start Backbone history a necessary step for bookmark able URL's
+    Backbone.history.start();
 
     $(document).ready(function () {
 
-        $.ajaxSetup({ headers: { 'apiKey': config.apiKey } });
+        updateCanvas();
 
-        $("#test").click(function () {
-            $.ajax({
-                url: '@Url.Action("Index")',
-                type: 'POST',
-                dataType: 'json',
-                data: JSON.stringify(testitem),
-                //headers: { 'apiKey' : config.apiKey },
-                contentType: 'application/json; charset=utf-8',
-                success: function (data) {
-                    // get the result and do some magic with it
-                    var message = data.Message;
-                    alert("message");
-                }
-            });
+        $("#add_rect").click(function () {
+            blueprint.rectangles.add(new RectangleModel());
         });
+
+        $("#del_rect").click(function () {
+            blueprint.rectangles.pop();
+        });
+
+        $("#add_ellipse").click(function () {
+            blueprint.ellipses.add(new EllipseModel());
+        });
+
+        $("#del_ellipse").click(function () {
+            blueprint.ellipses.pop();
+        });
+
+        $("#save").click(function () {
+            blueprint.save();
+        });
+
+        $("#load").click(function () {
+            blueprint.fetch();
+        });
+
     });
 
 </script>
 <h2>
-    Index</h2>
-<input id="test" type="button" value="Test" />
+    Editor app.</h2>
+<div class="row">
+    <div class="span8">
+        <p id="rect_count"></p>
+        <p id="ellipse_count"></p>
+        <input id="add_rect" type="button" class="btn" value="Add rect" />
+        <input id="del_rect" type="button" class="btn" value="Del rect" />
+        <input id="add_ellipse" type="button" class="btn" value="Add ellipse" />
+        <input id="del_ellipse" type="button" class="btn" value="Del ellipse" />
+        <input id="save" type="button" class="btn" value="Save" />
+        <input id="load" type="button" class="btn" value="Load" />
+    </div>
+</div>
+<hr/>
+<div class="row">
+    <div class="span2">
+        <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+                <li class="nav-header">Rectangles</li>
+                <div id="rect_nav"></div>
+                <li class="nav-header">Ellipses</li>
+                <div id="ellipse_nav"></div>
+                <li class="nav-header">Other</li>
+                <li id="canvas_nav"></li>
+            </ul>
+        </div>
+        <!--/.well -->
+    </div>
+    <div class="span10">
+        <!--Body content-->
+    </div>
+</div>

@@ -5,6 +5,10 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using SampleProject.Authentication;
+using SampleProject.Common;
+using SampleProject.Models.BlueprintModels;
+using SampleProject.Models.Repositories;
+using SampleProject.ViewModels.BlueprintAjax;
 using SampleProject.ViewModels.Editor;
 
 namespace SampleProject.Controllers
@@ -18,40 +22,22 @@ namespace SampleProject.Controllers
 
     public class EditorController : BaseController
     {
-
-        #region Private fileds
-
-        private readonly IApiKeyStore _store;
-
-        #endregion
-
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="authService"></param>
-        /// <param name="store"></param>
-        public EditorController(IUserAuthService authService,IApiKeyStore store):base(authService)
+        /// <param name="authService"> </param>
+        /// <param name="logger"> </param>
+        public EditorController(IUserAuthService authService,ILogger logger) : base(authService,logger)
         {
-            _store = store;
+
         }
 
-        private bool IsApiKeyValid()
-        {
-            var apiKey = Request.Headers["apiKey"];
-            return _store.IsValidApiKey(apiKey);
-        }
+        #region Index page
 
-        public ActionResult Http403()
-        {
-            Response.StatusCode = 403;
-            return Content("Unknown API key.", "text/plain");
-        }
-        
         //
         // GET: /Editor/{id}
-        [ActionName("Index")]
         [HttpGet]
-        public ActionResult Editor([DefaultValue(0)]int id)
+        public ActionResult Index([DefaultValue(0)]int id)
         {
             var model = new IndexViewModel();
             if (Request.IsAuthenticated)
@@ -62,33 +48,16 @@ namespace SampleProject.Controllers
                 }
                 model.ApiKey = UserInfo.ApiKey;
             }
-            
+
             return View(model);
         }
 
-      
-        //
-        // POST: /Editor/
-        [HttpPost]
-        public ActionResult Index(JsonTest model)
-        {
-            if (!IsApiKeyValid()) return Http403();
+        #endregion
 
-            if (ModelState.IsValid)
-            {
-                return Json(new JsonTest { Message = "OK" });
-            }
-            string errorMessage = "";
-            foreach (var key in ModelState.Keys)
-            {
-                var error = ModelState[key].Errors.FirstOrDefault();
-                if (error != null)
-                {
-                    errorMessage += " " + error.ErrorMessage + " ";
-                }
-            }
-            return Json(new JsonTest { Message = errorMessage });
-        }
-
+        
     }
+
+       
 }
+
+

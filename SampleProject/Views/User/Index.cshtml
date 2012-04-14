@@ -44,7 +44,7 @@
 </div>
 
 <div class="row">
-    <div class="span8">
+    <div class="span12">
         <h2>Blueprints</h2>
         <p><a class="btn btn-large" href="@Url.Action("Create", "Blueprint")">Create new &raquo;</a></p>
         
@@ -69,7 +69,7 @@
                         <th>@blueprint.Description</th>
                         <th>@blueprint.Changed</th>
                              <th>
-                             <a class="btn" href="@Url.Action("Index", "Editor", new { id = blueprint.BlueprintId })">Edit</a>
+                             <a class="btn" href="@Url.Action("Index", "Editor")/#@blueprint.BlueprintId">Edit</a>
                              <a class="btn" href="@Url.Action("Delete", "Blueprint", new { id = blueprint.BlueprintId })">Delete</a>
                              </th>
                     </tr>

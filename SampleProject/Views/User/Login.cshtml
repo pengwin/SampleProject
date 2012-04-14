@@ -11,7 +11,7 @@
         <h2>Login</h2>
         <form class="well" action="@Url.Action("Login","User")" method="post"> 
 
-            <div class="alert alert-error">
+            <div style="color: red;">
                 @Html.ValidationMessageFor(model => model.OpenIdUrl)<br/>
             </div>
 

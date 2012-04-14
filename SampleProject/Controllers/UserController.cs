@@ -40,8 +40,8 @@ namespace SampleProject.Controllers
         /// <summary>
         /// Constructor.
         /// </summary>
-        public UserController(ILogger logger, IUserRepository users, IUserAuthService userAuth)
-            : base(userAuth)
+        public UserController(IUserRepository users, IUserAuthService authService, ILogger logger)
+            : base(authService, logger)
         {
             _openId = new OpenIdRelyingParty();
             _logger = logger;
