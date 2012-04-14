@@ -12,6 +12,7 @@ using Ninject;
 using Ninject.Web.Common;
 using Ninject.Web.Mvc;
 using SampleProject.Authentication;
+using SampleProject.Controllers;
 using SampleProject.Models;
 
 namespace SampleProject
@@ -28,19 +29,26 @@ namespace SampleProject
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+              "Editor_default",
+              "Editor/{id}",
+              new { controller = "Editor", action = "Index", id = UrlParameter.Optional }
+              );
+
+            routes.MapRoute(
                 "Default", 
                 "{controller}/{action}/{id}",
                 new { controller = "Home", action = "Index", id = UrlParameter.Optional }, new[] { "SampleProject.Controllers" }
                 );
+           
         }
 
         private void InitDbCodeFirst()
         {
-            string connectionString = ConfigurationManager.ConnectionStrings["UserContext"].ConnectionString;
+            string connectionString = ConfigurationManager.ConnectionStrings["DatabaseContext"].ConnectionString;
             var connectionFactory = new SqlCeConnectionFactory("System.Data.SqlServerCe.4.0", "", connectionString);
             Database.DefaultConnectionFactory = connectionFactory;
-            Database.SetInitializer<UserContext>(new DropCreateDatabaseIfModelChanges<UserContext>());
-            //Database.SetInitializer<UserContext>(new DropCreateDatabaseAlways<UserContext>());
+            //Database.SetInitializer<DatabaseContext>(new DropCreateDatabaseIfModelChanges<DatabaseContext>());
+            Database.SetInitializer<DatabaseContext>(new DropCreateDatabaseAlways<DatabaseContext>());
         }
 
         private IUserAuthService _userInfoService;
@@ -48,8 +56,14 @@ namespace SampleProject
         public override void Init()
         {
             _userInfoService = new UserAuthService();
-            this.PostAuthenticateRequest += new EventHandler(MvcApplication_PostAuthenticateRequest);
+            //PostAuthenticateRequest += new EventHandler(MvcApplication_PostAuthenticateRequest);
+            AuthenticateRequest += new EventHandler(MvcApplication_AuthenticateRequest);
             base.Init();
+        }
+
+        void MvcApplication_AuthenticateRequest(object sender, EventArgs e)
+        {
+            _userInfoService.SetCurrentUserInfo();
         }
 
         void MvcApplication_PostAuthenticateRequest(object sender, EventArgs e)
@@ -66,6 +80,7 @@ namespace SampleProject
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+            ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
         }
 
         protected override IKernel CreateKernel()

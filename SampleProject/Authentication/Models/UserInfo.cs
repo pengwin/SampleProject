@@ -17,6 +17,7 @@ namespace SampleProject.Authentication.Models
         public string Email { get; set; }
         public string FullName { get; set; }
         public string[] Roles { get; set; }
+        public string ApiKey { get; set; }
 
         /// <summary>
         /// Constructor.
@@ -33,7 +34,7 @@ namespace SampleProject.Authentication.Models
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();
-            builder.AppendFormat("{0}|{1}|{2}|{3}|", UserId, Username, Email, FullName);
+            builder.AppendFormat("{0}|{1}|{2}|{3}|{4}|", UserId, Username, Email, FullName,ApiKey);
             foreach (var role in Roles)
             {
                 builder.AppendFormat("{0};",role);
@@ -65,7 +66,8 @@ namespace SampleProject.Authentication.Models
                 Username = user.Username,
                 Email = user.Email,
                 FullName = user.FullName,
-                Roles = roles.ToArray()
+                Roles = roles.ToArray(),
+                ApiKey = user.ApiKey.ToString()
             };
             return result;
         }
@@ -81,7 +83,7 @@ namespace SampleProject.Authentication.Models
             Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(user));
 
             var data = user.Split('|');
-            if (data.Length != 5)
+            if (data.Length != 6)
                 throw new ArgumentException("This string is not a serialized UserInfo class.");
 
             var result = new UserInfo
@@ -89,10 +91,11 @@ namespace SampleProject.Authentication.Models
                 UserId = int.Parse(data[0]),
                 Username = data[1],
                 Email = data[2],
-                FullName = data[3]
+                FullName = data[3],
+                ApiKey = data[4]
             };
 
-            var rolesData = data[4];
+            var rolesData = data[5];
             var roles = rolesData.Split(new [] {';'},StringSplitOptions.RemoveEmptyEntries);
             result.Roles = roles;
 

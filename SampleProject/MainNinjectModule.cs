@@ -2,6 +2,8 @@
 using SampleProject.Authentication;
 using SampleProject.Common;
 using SampleProject.Models;
+using SampleProject.Models.BlueprintSearch;
+using SampleProject.Models.Repositories;
 
 namespace SampleProject
 {
@@ -17,9 +19,12 @@ namespace SampleProject
             Bind<IUserRepository>().To<UserRepository>();
             Bind<IRoleRepository>().To<RoleRepository>();
             Bind<IBlueprintRepository>().To<BlueprintRepository>();
-            Bind<UserContext>().To<UserContext>();
+            Bind<DatabaseContext>().To<DatabaseContext>();
+
+            Bind<IBlueprintSearchService>().To<BlueprintSearchService>();
 
             Bind<IUserAuthService>().To<UserAuthService>();
+            Bind<IApiKeyStore>().To<ApiKeyStore>();
         }
     }
 }

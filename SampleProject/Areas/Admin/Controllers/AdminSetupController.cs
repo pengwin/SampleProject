@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using SampleProject.Areas.Admin.ViewModels.AdminSetup;
 using SampleProject.Authentication;
 using SampleProject.Models;
+using SampleProject.Models.Repositories;
 using SampleProject.Models.UserModels;
 
 namespace SampleProject.Areas.Admin.Controllers

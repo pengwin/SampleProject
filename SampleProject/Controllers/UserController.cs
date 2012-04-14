@@ -12,6 +12,7 @@ using DotNetOpenAuth.OpenId.Extensions.SimpleRegistration;
 using Ninject;
 using SampleProject.Authentication;
 using SampleProject.Models;
+using SampleProject.Models.Repositories;
 using SampleProject.Models.UserModels;
 using SampleProject.ViewModels.User;
 
@@ -57,10 +58,8 @@ namespace SampleProject.Controllers
         [Authorize]
         public ActionResult Index()
         {
-
-            //var tt = HttpContext.User.IsInRole("tt");
-            ViewData["Username"] = UserInfo.Username;
-            return View();
+            var user = _users.GetUserById(UserInfo.UserId);
+            return View(user);
         }
 
         /// <summary>

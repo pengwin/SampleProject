@@ -25,16 +25,20 @@ namespace SampleProject.HtmlHelpers
             var closeTag = String.Format("</{0}>", highlightTag);
             var builder = new StringBuilder(target);
 
-            var match = Regex.Match(target, pattern, RegexOptions.IgnoreCase);
-
-            int count = 0;
-            while (match.Success)
+            if (!string.IsNullOrEmpty(pattern))
             {
-                builder.Insert(match.Index + count, openTag);
-                count += openTag.Length;
-                builder.Insert(match.Index + match.Length + count, closeTag);
-                count += closeTag.Length;
-                match = match.NextMatch();
+
+                var match = Regex.Match(target, pattern, RegexOptions.IgnoreCase);
+
+                int count = 0;
+                while (match.Success)
+                {
+                    builder.Insert(match.Index + count, openTag);
+                    count += openTag.Length;
+                    builder.Insert(match.Index + match.Length + count, closeTag);
+                    count += closeTag.Length;
+                    match = match.NextMatch();
+                }
             }
             return new MvcHtmlString(builder.ToString());
         }

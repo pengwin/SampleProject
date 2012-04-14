@@ -1,0 +1,14 @@
+﻿@model List<SampleProject.Models.BlueprintModels.Blueprint>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+
+@foreach( var blueprint in Model)
+{
+    @blueprint.Name
+
+}

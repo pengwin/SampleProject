@@ -4,25 +4,37 @@
     ViewBag.Title = "Login";
 }
 
-<h2>Login</h2>
 
-@using (Html.BeginForm("Login","User"))
-{
-    @Html.ValidationMessageFor(model => model.OpenIdUrl)<br/>
+<div class="row">
     
-    <label for="google_login">Google</label>
-    @Html.RadioButtonFor(model => model.LoginMethod, LoginMethod.Google, new { id = "google_login" })<br/>
+    <div class="span4 offset4">
+        <h2>Login</h2>
+        <form class="well" action="@Url.Action("Login","User")" method="post"> 
 
-    <label for="yandex_login">Yandex</label>  
-    @Html.RadioButtonFor(model => model.LoginMethod, LoginMethod.Yandex, new { id = "yandex_login" })<br/>
+            <div class="alert alert-error">
+                @Html.ValidationMessageFor(model => model.OpenIdUrl)<br/>
+            </div>
 
-    <label for="openid_login">OpenId</label>   
-    @Html.RadioButtonFor(model => model.LoginMethod, LoginMethod.OpenId, new { id = "openid_login" })<br/>
+            <label>
+                <h3>With Google Account</h3>
+                @Html.RadioButtonFor(model => model.LoginMethod, LoginMethod.Google)
+            </label>
 
-    @Html.Label("Enter your openId:") 
-    @Html.TextBoxFor(model => model.OpenIdUrl)<br/>
+            <label>
+                <h3>With Yandex Account</h3>
+                @Html.RadioButtonFor(model => model.LoginMethod, LoginMethod.Yandex)
+            </label>  
+    
+            <label for="openid_radion">
+                <label>With your <strong>OpenID</strong>
+                    @Html.TextBoxFor(model => model.OpenIdUrl)
+                </label>
+                @Html.RadioButtonFor(model => model.LoginMethod, LoginMethod.OpenId, new { id = "openid_radion" })
+            </label>      
 
-    @Html.HiddenFor(model => model.ReturnUrl)
+            @Html.HiddenFor(model => model.ReturnUrl)
 
-    <input type="submit" value="Login" />
-}
+            <input class="btn btn-primary btn-large" type="submit" value="Login" />
+        </form>
+    </div>
+</div>

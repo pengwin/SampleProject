@@ -12,7 +12,7 @@ namespace SampleProject.Areas.Admin.Controllers
 { 
     public class BlueprintsController : Controller
     {
-        private UserContext db = new UserContext();
+        private DatabaseContext db = new DatabaseContext();
 
         //
         // GET: /Admin/Blueprints/

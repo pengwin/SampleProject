@@ -4,13 +4,13 @@
     ViewBag.Title = "Register";
 }
 
-<h2>Register</h2>
+<h2>Register new account</h2>
 
 @using (Html.BeginForm("Register", "User"))
 {
     @Html.ValidationSummary()<br/>
     
-    <p>Your OpenId identifier:</p>
+    <p>Your logged in with OpenID:</p>
     @Model.OpenIdIdentifier<br/>
     @Html.HiddenFor(model => model.OpenIdIdentifier)
     
@@ -25,5 +25,5 @@
     
     @Html.HiddenFor(model => model.ReturnUrl)
     
-    <input type="submit" value="Login" />
+    <input class="btn btn-primary btn-large" type="submit" value="Register" />
 }

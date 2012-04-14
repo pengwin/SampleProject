@@ -1,0 +1,33 @@
+﻿@using SampleProject.HtmlHelpers
+@model List<SampleProject.Models.BlueprintSearch.BlueprintSearchResult>
+           
+@{
+    ViewBag.Title = "Find";
+}
+
+<style>
+    i {
+        background-color: yellow;
+    }
+</style>
+<h2>Search results:</h2>
+
+@if (Model.Count != 0)
+{
+    foreach (var result in Model)
+    {
+        <fieldset>
+            <legend>Blueprint #@result.BlueprintId</legend>
+            <h3>Name</h3>
+            <p>@Html.HighlightPattern(result.NameResult.Value, result.NameResult.Pattern, "i")</p>
+            <h3>Author</h3>
+            <p>@Html.HighlightPattern(result.AuthorResult.Value, result.AuthorResult.Pattern, "i")</p>
+            <h3>Description</h3>
+            <p>@Html.HighlightPattern(result.DescriptionResult.Value, result.DescriptionResult.Pattern, "i")</p>
+        </fieldset>
+    }
+}
+else
+{
+    <p>No blueprints found</p>
+}

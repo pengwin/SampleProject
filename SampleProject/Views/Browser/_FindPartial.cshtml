@@ -1,0 +1,35 @@
+﻿@model SampleProject.ViewModels.Browser.FindViewModel
+
+@{
+    
+}
+
+@using (Html.BeginForm("Find","Browser")) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Search bluerpints</legend>
+
+        <label>
+            Name
+            @Html.EditorFor(model => model.BlueprintName)
+            @Html.ValidationMessageFor(model => model.BlueprintName)
+        </label>
+
+        <label>
+            Author (Username)
+            @Html.EditorFor(model => model.BlueprintAuthor)
+            @Html.ValidationMessageFor(model => model.BlueprintAuthor)
+        </label>
+
+        <label>
+            Description
+            @Html.TextAreaFor(model => model.BlueprintDescription)
+            @Html.ValidationMessageFor(model => model.BlueprintDescription)
+        </label>
+
+        <p>
+            <input class="btn btn-primary btn-large" type="submit" value="Search" />
+        </p>
+    </fieldset>
+}
+

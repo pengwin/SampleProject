@@ -1,0 +1,24 @@
+﻿@model SampleProject.ViewModels.Blueprint.CreateViewModel
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm("Create","Blueprint"))
+{
+    <fieldset>
+        <legend>Blueprint</legend>
+        <label>
+            Name
+            @Html.EditorFor(model=>model.Name)
+        </label>
+        <label>
+            Description
+            @Html.TextAreaFor(model=>model.Description)
+        </label>
+    </fieldset>
+    <input class="btn btn-primary btn-large" type="submit" value="Create" />
+}
+

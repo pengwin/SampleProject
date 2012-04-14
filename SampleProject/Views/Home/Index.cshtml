@@ -2,13 +2,29 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
 
-@Html.ActionLink("User","Index","User")
-@Html.ActionLink("Login","Login","User")
-@Html.ActionLink("Logout","Logout","User")
-@Html.ActionLink("Admin Setup", "Index", "AdminSetup", new { Area = "Admin" }, new{})
-@Html.ActionLink("Admin", "Index", "Home", new { Area = "Admin" }, new{})
-@Html.ActionLink("Blueprints","Index","Blueprints")
+
+<div class="row">
+    <h2>Hello! This is primitive vector editor application.</h2>
+    @if (!Request.IsAuthenticated)
+    {
+        <div class="span6">
+            <h2>Login</h2>
+            <p>You can simple Login with OpenID</p>
+            <p><a class="btn" href="@Url.Action("Login", "User")">Login &raquo;</a></p>
+        </div>
+        <div class="span6">
+            <h2>Editor</h2>
+            <p>You can try Editor Demo version</p>
+            <p><a class="btn" href="@Url.Action("Index", "Editor")">Editor &raquo;</a></p>
+        </div>
+    }
+    else
+    {
+        <p><a class="btn btn-primary btn-large" href="@Url.Action("Index", "User")">Go to your profile &raquo;</a></p>
+        
+       
+    }
+</div>
 
 

@@ -1,8 +1,82 @@
-﻿@model SampleProject.ViewModels.User.UserViewModel
+﻿@model SampleProject.Models.UserModels.User
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Profile: @Model.Username</h2>
 
-Logged as @ViewBag.Username
+<div class="row">
+    <div class="span4">
+        <fieldset>
+            <legend>Personal information</legend>
+            <p><strong>Full name:</strong> @Model.FullName</p>
+            <p><strong>Email:</strong> @Model.Email</p>
+        </fieldset>
+    </div>
+    <div class="span4">
+        <fieldset>
+            <legend>OpenIDs</legend>
+            @foreach( var openid in Model.OpenIds)
+            {
+                <p><strong>Provider:</strong> @openid.ProviderName</p>
+                <p><strong>Url:</strong> @openid.OpenIdUrl</p>
+            }
+            
+        </fieldset>
+    </div>
+    <div class="span4">
+        <fieldset>
+            <legend>Roles</legend>
+            @if (Model.Roles.Count != 0)
+            {
+                 foreach (var role in Model.Roles)
+                 {
+                    <p><strong> @role.RoleName</strong></p>
+                 }
+            }
+            else
+            {
+                <p>No roles assigned.</p>
+            }
+            
+        </fieldset>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span8">
+        <h2>Blueprints</h2>
+        <p><a class="btn btn-large" href="@Url.Action("Create", "Blueprint")">Create new &raquo;</a></p>
+        
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Changed</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Blueprints.Count; i++)
+                {
+                    var blueprint = Model.Blueprints.ToList()[i];
+                    {
+                         <tr>
+                        <th>@(i + 1)</th>
+                        <th>@blueprint.Name</th>
+                        <th>@blueprint.Description</th>
+                        <th>@blueprint.Changed</th>
+                             <th>
+                             <a class="btn" href="@Url.Action("Index", "Editor", new { id = blueprint.BlueprintId })">Edit</a>
+                             <a class="btn" href="@Url.Action("Delete", "Blueprint", new { id = blueprint.BlueprintId })">Delete</a>
+                             </th>
+                    </tr>
+                    }
+                   
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
