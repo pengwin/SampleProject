@@ -3,13 +3,13 @@ define([
   'jquery',
   'underscore',
   'backbone',
-  'models/blockmodel'
-], function ($, _, Backbone, BlockModel) {
+  'models/elementmodel'
+], function ($, _, Backbone, ElementModel) {
 
     /**
     * Model of rectangle block
     */
-    var RectangleModel = BlockModel.extend({
+    var RectangleModel = ElementModel.extend({
 
         defaults: {
             type: 'rectangle',

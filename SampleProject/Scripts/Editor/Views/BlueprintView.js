@@ -8,8 +8,9 @@ define([
         'text!templates/toolbar.htm',
         'text!templates/navbar.htm',
         'text!templates/infobar.htm',
-        'views/canvasview'
-    ], function ($, _, Backbone, toolbarTemplate, navbarTemplate, infobarTemplate, CanvasView) {
+        'views/canvasview',
+        'views/rectangleview'
+    ], function ($, _, Backbone, toolbarTemplate, navbarTemplate, infobarTemplate, CanvasView, RectangleView) {
 
         var BlueprintView = Backbone.View.extend({
 
@@ -22,10 +23,14 @@ define([
                 this._renderInfobar();
                 this.btnSave = $("#btnSave", this.toolbar);
                 this.btnLoad = $("#btnLoad", this.toolbar);
+                this.btnAddRect = $("#btnAddRect", this.toolbar);
+                this.btnDelRect = $("#btnDelRect", this.toolbar);
                 this.btnBlueprintEdit = $('#btnBlueprintEdit', this.infobar);
                 this._bindHandlers();
 
                 this._initCanvas();
+
+                this.rectangles = {};
 
                 this._setStartState();
             },
@@ -71,6 +76,12 @@ define([
                 this.btnBlueprintEdit.click(function () {
                     self.trigger("edit_request");
                 });
+                this.btnAddRect.click(function () {
+                    self.trigger("add_rect_request");
+                });
+                this.btnDelRect.click(function () {
+                    self.trigger("del_rect_request");
+                });
             },
 
             _setStartState: function () {
@@ -88,6 +99,14 @@ define([
                 /// </summary>
                 this.btnSave.html("Save");
                 this.btnLoad.removeAttr("disabled");
+            },
+
+            addRectangle: function (rectData) {
+                var rectView = new RectangleView();
+                rectView.graphics.renderOnPaper(this.canvas.paper);
+                $("#rect_nav", this.navbar).append(rectView.navbar);
+                this.rectangles[rectData.cid] = rectView;
+                return rectView;
             },
 
             update: function (attrs) {

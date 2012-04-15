@@ -1,5 +1,5 @@
-﻿// CanvasController module
-// controller set the link between canvas model and canvas view
+﻿// RectangleController module
+// controller set the link between rectangle model and rectangle view
 
 define([
         'jquery',
@@ -8,9 +8,9 @@ define([
         'controllers/basecontroller'
     ], function ($, _, Backbone, BaseController) {
 
-        var CanvasController = BaseController.extend({
+        var RectangelController = BaseController.extend({
             renderForm: function () {
-                this.form.render("Canvas", this.model.toJSON(), ["widthLimit","heightLimit","padding"]);
+                this.form.render("Rectangle", this.model.toJSON(), ["type"]);
                 $('body').append(this.form.el);
             },
             bindHandlers: function () {
@@ -26,5 +26,5 @@ define([
             }
         });
 
-        return CanvasController;
+        return RectangelController;
     });

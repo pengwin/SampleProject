@@ -1,21 +1,21 @@
-﻿// CanvasView module
-// Responsible for displaying canvas data
+﻿// RectnagleView module
+// Responsible for displaying rectangle data
 
 define([
         'jquery',
         'underscore',
         'backbone',
-        'views/graphics/canvasgraphics'
-    ], function ($, _, Backbone, CanvasGraphics) {
+        'views/graphics/rectanglegraphics'
+    ], function ($, _, Backbone, RectangleGraphics) {
 
-        var CanvasView = Backbone.View.extend({
+        var RectangleView = Backbone.View.extend({
 
             initialize: function () {
                 /// <summary>
                 /// constructor
                 /// </summary>
                 this._renderNavbar();
-                this.btnCanvasEdit = $(this.navbar);
+                this.btnEdit = $(this.navbar);
 
                 this._initGraphics();
 
@@ -23,13 +23,11 @@ define([
             },
 
             _initGraphics: function () {
-                this.graphics = new CanvasGraphics();
-                this.canvas = this.graphics.el;
-                this.paper = this.graphics._paper;
+                this.graphics = new RectangleGraphics();
             },
             _renderNavbar: function () {
-                this.navbar = this.make("a", { href: "#", id: "btnCanvasEdit" });
-                $(this.navbar).html("Canvas");
+                this.navbar = this.make("a", { href: "#", id: "btnEdit" });
+                $(this.navbar).html("Rectangle");
             },
 
             _bindHandlers: function () {
@@ -40,15 +38,20 @@ define([
 
                 var self = this;
 
-                this.btnCanvasEdit.click(function () {
+                this.btnEdit.click(function () {
                     self.trigger("edit_request");
                 });
             },
 
             update: function (attrs) {
                 this.graphics.set(attrs);
+                this.graphics.update();
+            },
+
+            remove: function () {
+                this.navbar.remove();
             }
         });
 
-        return CanvasView;
+        return RectangleView;
     });

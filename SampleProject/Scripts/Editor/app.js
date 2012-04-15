@@ -16,7 +16,7 @@ define(['jquery',
                 $("#toolbar").append(this.view.toolbar);
                 $("#navbar").append(this.view.navbar);
                 $("#infobar").append(this.view.infobar);
-                $("#canvas").append(this.view.canvas.paper);
+                $("#canvas").append(this.view.canvas.canvas);
                 this.controller = new BlueprintController({ model: this.blueprint, view: this.view });
 
             },

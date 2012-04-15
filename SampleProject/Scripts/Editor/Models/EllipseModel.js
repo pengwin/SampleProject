@@ -14,8 +14,8 @@
             type: 'ellipse',
             x: 0,
             y: 0,
-            width: 200,
-            height: 200
+            width: 10,
+            height: 10
         }
     });
     return EllipseModel;
