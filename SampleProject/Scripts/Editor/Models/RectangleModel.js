@@ -1,18 +1,23 @@
-﻿var RectangleModel = Backbone.Model.extend({
+﻿
+define([
+  'jquery',
+  'underscore',
+  'backbone',
+  'models/blockmodel'
+], function ($, _, Backbone, BlockModel) {
 
-    defaults: {
-        x: 0,
-        y: 0,
-        width: 1,
-        height: 1
-    },
-    initialize: function () {
-        this.topLimit = 1;
-        this.bottomLimit = 1;
-        this.leftLimit = 1;
-        this.rightLimit = 1;
-    },
-    validate: function (attrs) {
-        
-    }
+    /**
+    * Model of rectangle block
+    */
+    var RectangleModel = BlockModel.extend({
+
+        defaults: {
+            type: 'rectangle',
+            x: 0,
+            y: 0,
+            width: 10,
+            height: 10
+        }
+    });
+    return RectangleModel;
 });

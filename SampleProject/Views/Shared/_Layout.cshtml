@@ -1,97 +1,84 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <title>Sample project</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
 
-    <!-- styles -->
+    <!-- Styles -->
     <link href="../../Content/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
     <style type="text/css">
-        body {
+        body
+        {
             padding-top: 60px;
             padding-bottom: 40px;
         }
     </style>
-      <link href="../../Content/bootstrap/css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
+    <link href="../../Content/bootstrap/css/bootstrap-responsive.css" rel="stylesheet"
+        type="text/css" />
     <link rel="shortcut icon" href="../assets/ico/favicon.ico">
-    <!--<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">-->
-  </head>
+    @RenderSection("styles", false)
+    <!-- End Styles -->
 
-  <body>
+</head>
+    <body>
+        <!--- Navigation -->
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </a><a class="brand" href="@Url.Action("Index", "Home")">Sample project</a>
 
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="@Url.Action("Index","Home")">Sample project</a>
-          <div class="nav-collapse">
-              <ul class="nav">
-                  
-                  <li class="active"><a href="@Url.Action("Index","Home")">Home</a></li>
-                 
-                  <li><a href="@Url.Action("Index", "User")">Profile</a></li>
-                  <li><a href="@Url.Action("Index", "Browser")">Browser</a></li>
-                  <li><a href="@Url.Action("Index", "Editor")">Editor</a></li>
-              </ul>
-              <ul class="nav pull-right">
-               @if (Request.IsAuthenticated)
-                  {
-                      <li><a href="@Url.Action("Logout", "User")">Logout</a></li>
-                  }
-                  else
-                  {
-                      <li><a href="@Url.Action("Login", "User")">Login</a></li>
-                  }
-              <li><a href="@Url.Action("Index", "Home", new { Area = "Admin" })">Admin</a></li>
-              </ul>
-              
-          </div><!--/.nav-collapse -->
+                    <!-- Nav collapse -->
+                    <div class="nav-collapse">
+                        <ul class="nav">
+                            <li class="active"><a href="@Url.Action("Index", "Home")">Home</a></li>
+                            <li><a href="@Url.Action("Index", "User")">Profile</a></li>
+                            <li><a href="@Url.Action("Index", "Browser")">Browser</a></li>
+                            <li><a href="@Url.Action("Index", "Editor")">Editor</a></li>
+                        </ul>
+                        <ul class="nav pull-right">
+                            @if (Request.IsAuthenticated)
+                            {
+                                <li><a href="@Url.Action("Logout", "User")">Logout</a></li>
+                            }
+                            else
+                            {
+                                <li><a href="@Url.Action("Login", "User")">Login</a></li>
+                            }
+                            <li><a href="@Url.Action("Index", "Home", new { Area = "Admin" })">Admin</a></li>
+                        </ul>
+                    </div>
+                    <!-- End Nav collapse -->
+
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
+        <!--- End Navigation -->
+        
+        <!-- Body -->
+        <div class="container">
+            @RenderBody()
+            <hr>
+            <footer>
+                <p>
+                    &copy; Company 2012</p>
+            </footer>
+        </div>
+        <!--  End Body -->
 
-    <div class="container">
-
-@RenderBody()
-
-      <hr>
-
-      <footer>
-        <p>&copy; Company 2012</p>
-      </footer>
-
-    </div> <!-- /container -->
-
-    <!--================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="../../Scripts/Lib/jQuery/jquery-1.7.1.js" type="text/javascript"></script>
-    <!--<script src="../assets/js/bootstrap-transition.js"></script>
-    <script src="../assets/js/bootstrap-alert.js"></script>
-    <script src="../assets/js/bootstrap-modal.js"></script>
-    <script src="../assets/js/bootstrap-dropdown.js"></script>
-    <script src="../assets/js/bootstrap-scrollspy.js"></script>
-    <script src="../assets/js/bootstrap-tab.js"></script>
-    <script src="../assets/js/bootstrap-tooltip.js"></script>
-    <script src="../assets/js/bootstrap-popover.js"></script>
-    <script src="../assets/js/bootstrap-button.js"></script>
-    <script src="../assets/js/bootstrap-collapse.js"></script>
-    <script src="../assets/js/bootstrap-carousel.js"></script>
-    <script src="../assets/js/bootstrap-typeahead.js"></script>-->
-
-  </body>
+        <!-- Scripts -->
+        <script src="../../Scripts/Lib/jQuery/jquery-1.7.1.js" type="text/javascript"></script>
+        <script src="../../Scripts/json2.js" type="text/javascript"></script>
+        <!-- twitter bootstrap js -->
+        <script src="../../Content/bootstrap/js/bootstrap-collapse.js" type="text/javascript"></script>
+        <script src="../../Content/bootstrap/js/bootstrap-dropdown.js" type="text/javascript"></script>
+        <script src="../../Content/bootstrap/js/bootstrap-modal.js" type="text/javascript"></script>
+        <!-- view scripts -->
+        @RenderSection("scripts", false)
+        <!-- End Scripts -->
+    </body>
 </html>

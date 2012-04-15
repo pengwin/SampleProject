@@ -182,7 +182,7 @@ namespace SampleProject.Controllers
         public ActionResult Read(int id)
         {
             // check api key
-            if (!IsApiKeyValid()) return Http403();
+            //if (!IsApiKeyValid()) return Http403();
 
             var blueprint = _blueprints.GetBlueprintById(id);
             if (blueprint == null) return Http404();

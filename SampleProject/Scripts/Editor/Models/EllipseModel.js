@@ -1,18 +1,22 @@
-﻿var EllipseModel = Backbone.Model.extend({
+﻿define([
+  'jquery',
+  'underscore',
+  'backbone',
+  'models/blockmodel'
+], function ($, _, Backbone, BlockModel) {
 
-    defaults: {
-        x: 0,
-        y: 0,
-        horizontalRadius: 1,
-        verticalRadius: 1
-    },
-    initialize: function () {
-        this.topLimit = 1;
-        this.bottomLimit = 1;
-        this.leftLimit = 1;
-        this.rightLimit = 1;
-    },
-    validate: function (attrs) {
+    /**
+    * Model of rectangle block
+    */
+    var EllipseModel = BlockModel.extend({
 
-    }
+        defaults: {
+            type: 'ellipse',
+            x: 0,
+            y: 0,
+            width: 200,
+            height: 200
+        }
+    });
+    return EllipseModel;
 });
