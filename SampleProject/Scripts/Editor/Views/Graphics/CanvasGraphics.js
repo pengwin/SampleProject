@@ -1,4 +1,7 @@
-﻿
+﻿// Canvas graphics module
+// Canvas draws paper and svg graphics on it
+// provides public accessor for raphael paper
+
 define([
   'jquery',
   'underscore',
@@ -19,7 +22,6 @@ define([
             this.width = 1;
             this.height = 1;
 
-            this.padding = 5;
             this.gridStep = 1;
 
             this.style = {
@@ -42,7 +44,6 @@ define([
                 assetsLineOpacity: 1
             };
 
-            this._rectangles = [];
         },
 
         initialize: function () {
@@ -77,7 +78,6 @@ define([
                     this[key] = attr[key];
                 }
             }
-            this.update();
         },
 
         setStyle: function (attr) {
@@ -100,7 +100,6 @@ define([
                     this.style[key] = attr[key];
                 }
             }
-            this.update();
         },
 
         _updateGrid: function () {
@@ -131,19 +130,6 @@ define([
             this._border.update();
         },
 
-        _updateRectangles: function () {
-            for (var i = 0; i < this._rectangles.length; i++) {
-                var rectangle = this._rectangles[i];
-                rectangle.set({
-                    opacity: this.style.assetsOpacity,
-                    lineThickness: this.style.assetsLineThickness,
-                    lineOpacity: this.style.assetsLineOpacity,
-                    lineColor: this.style.assetsLineColor
-                });
-                rectangle.update();
-            }
-        },
-
         update: function () {
             /// <summary>
             /// Updates widget
@@ -156,7 +142,6 @@ define([
             this._paper.setSize(this.width, this.height);
             this._updateGrid();
             this._updateBorder();
-            this._updateRectangles();
         },
 
         render: function () {
@@ -173,7 +158,12 @@ define([
             this.bindMouseEvents();
             return this.el;
         },
-
+        paper: function () {
+            /// <summary>
+            /// Gets private paper
+            /// </summary>
+            return this._paper;
+        },
         bindMouseEvents: function () {
             /// <summary>
             /// Sets up mouse events handlers on container
@@ -182,52 +172,30 @@ define([
             _.extend(this, Backbone.Events);
             var self = this;
 
-            // bind handlers on border item using raphael
-            this._border.on('mouseup', function () {
-                self.trigger("svg:mouseup", self);
-            });
-
-            this._border.on('mousedown', function () {
-                self.trigger("svg:mousedown", self);
-            });
-
             // bind handlers on div element using jquery
-            $(this.el).mousedown(function () {
-                self.trigger("dom:mousedown", self);
+
+            $(this.el).click(function () {
+                self.trigger("click", self);
             });
 
-            $(this.el).mouseup(function () {
-                self.trigger("dom:mouseup", self);
+            $(this.el).mouseover(function () {
+                self.trigger("mouseover", self);
+            });
+
+            $(this.el).mouseout(function () {
+                self.trigger("mouseout", self);
             });
 
             $(this.el).mousemove(function (event) {
-                var offset = $(self.el).offset();
-                var x = event.pageX - offset.left - self.padding;
-                var y = event.pageY - offset.top - self.padding;
-                self.trigger("dom:mousemove", self, { x: x, y: y });
+                self.trigger("mousemove", self, { x: event.offsetX, y: event.offsetY });
             });
         },
-
-        drawRectangle: function () {
-            /// <summary>
-            /// Creates rectangle on paper
-            /// </summary>
-
-            var rectangle = new RectangleGraphics();
-            rectangle.renderOnPaper(this._paper);
-
-            this._rectangles.push(rectangle);
-
-            return rectangle;
-        },
-
-        removeRectangle: function (rectangle) {
-            /// <summary>
-            /// Removes the rectangle from paper.
-            /// </summary>
-
-            rectangle.remove();
-            this._rectangles.pop(rectangle);
+        remove: function () {
+        	/// <summary>
+        	/// Removes canvas graphics
+        	/// </summary>
+            this._paper.remove();
+            $(this.el).remove();
         }
     });
     return CanvasGraphics;

@@ -7,7 +7,7 @@ define([
 ], function ($, _, Backbone, RectangleModel) {
     var AddRectAction = function (collection) {
         /// <summary>
-        /// Adds a new rectangle model to the collection inside model
+        /// Adds a new rectangle model to the collection
         /// </summary>
 
         this.collection = collection;
@@ -21,6 +21,7 @@ define([
         var rectangle = new RectangleModel();
         this.collection.push(rectangle);
         rectangle.set({ x: 0, y: 0, width: 5, height: 5 });
+        
         return true;
     };
 

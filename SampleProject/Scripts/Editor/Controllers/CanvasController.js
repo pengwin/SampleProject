@@ -5,21 +5,21 @@ define([
         'jquery',
         'underscore',
         'backbone',
+        
         'controllers/basecontroller'
     ], function ($, _, Backbone, BaseController) {
 
         var CanvasController = BaseController.extend({
-            renderForm: function () {
-                this.form.render("Canvas", this.model.toJSON(), ["widthLimit","heightLimit","padding"]);
-                $('body').append(this.form.el);
-            },
+            formCaption: "Canvas",
+            modelExcludedFields: ["widthLimit","heightLimit","padding"],
+
             bindHandlers: function () {
 
                 BaseController.prototype.bindHandlers.call(this);
 
                 var self = this;
 
-                this.view.on('edit_request', function () {
+                this.view.on('navbar_click', function () {
                     self.editAction.execute();
                 });
 

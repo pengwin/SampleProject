@@ -37,15 +37,11 @@ namespace SampleProject.Controllers
         //
         // GET: /Editor/{id}
         [HttpGet]
-        public ActionResult Index([DefaultValue(0)]int id)
+        public ActionResult Index()
         {
             var model = new IndexViewModel();
             if (Request.IsAuthenticated)
             {
-                if (id != 0)
-                {
-                    model.BlueprintId = id;
-                }
                 model.ApiKey = UserInfo.ApiKey;
             }
 

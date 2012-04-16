@@ -22,10 +22,11 @@ require.config({
 // Let's kick off the application
 
 require([
-  'app'
-], function (App) {
+  'app',
+  'backbone'
+], function (AppController,Backbone) {
 
-    App.initialize();
-    App.start();
+    var App = new AppController();
+    Backbone.history.start();
 
 });

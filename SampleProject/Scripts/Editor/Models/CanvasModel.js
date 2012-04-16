@@ -15,7 +15,6 @@ define([
             height: 1,
             widthLimit: 1,
             heightLimit: 1,
-            padding: 1,
             gridStep: 1
         },
 

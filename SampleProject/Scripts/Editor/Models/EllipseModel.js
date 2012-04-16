@@ -2,13 +2,13 @@
   'jquery',
   'underscore',
   'backbone',
-  'models/blockmodel'
-], function ($, _, Backbone, BlockModel) {
+  'models/elementmodel'
+], function ($, _, Backbone, ElementModel) {
 
     /**
-    * Model of rectangle block
+    * Model of ellipse block
     */
-    var EllipseModel = BlockModel.extend({
+    var EllipseModel = ElementModel.extend({
 
         defaults: {
             type: 'ellipse',

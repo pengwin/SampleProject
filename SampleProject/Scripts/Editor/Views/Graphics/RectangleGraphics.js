@@ -27,15 +27,13 @@ define([
             /// Updates rectangle
             /// </summary>
 
+            BaseGraphics.prototype.update.call(this);
+
             this._el.attr('x', this.x);
             this._el.attr('y', this.y);
             this._el.attr('width', this.width);
             this._el.attr('height', this.height);
-            this._el.attr("fill", this.color);
-            this._el.attr("fill-opacity", this.opacity);
-            this._el.attr('stroke', this.lineColor);
-            this._el.attr('stroke-opacity', this.lineOpacity);
-            this._el.attr('stroke-width', this.lineThickness);
+
         }
 
     });

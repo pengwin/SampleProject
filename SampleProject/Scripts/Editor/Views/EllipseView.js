@@ -6,19 +6,19 @@ define([
         'underscore',
         'backbone',
         'views/baseview',
-        'views/graphics/rectanglegraphics'
-    ], function ($, _, Backbone, BaseView,RectangleGraphics) {
+        'views/graphics/ellipsegraphics'
+    ], function ($, _, Backbone, BaseView,EllipseGraphics) {
 
-        var RectangleView = BaseView.extend({
+        var EllipseView = BaseView.extend({
 
             initGraphics: function () {
-                this.graphics = new RectangleGraphics();
+                this.graphics = new EllipseGraphics();
             },
             initNavbar: function () {
                 this.navbar = this.make("a", {id: "btnEdit" });
-                $(this.navbar).html("Rectangle");
+                $(this.navbar).html("Ellipse");
             }
         });
 
-        return RectangleView;
+        return EllipseView;
     });

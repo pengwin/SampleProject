@@ -129,6 +129,10 @@ define([
                 var id = $(item).attr('id');
                 $(item).attr('value', attrs[id]);
             });
+        },
+
+        remove: function () {
+            $(this.el).remove();
         }
 
     });

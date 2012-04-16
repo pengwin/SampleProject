@@ -38,7 +38,7 @@ namespace SampleProject.Controllers
                                     {Name = model.Name, Description = model.Description, Changed = DateTime.Now};
                 _blueprints.CreateBlueprintForUser(UserInfo.UserId, blueprint);
                 _blueprints.SaveChanges();
-                return RedirectToAction("Index", "User");
+                return Redirect(String.Format("{0}/#{1}",Url.Action("Index", "Editor"),blueprint.BlueprintId));
             }
             return View(model);
         }

@@ -28,8 +28,6 @@ define([
             /// <summary>
             /// Constructor
             /// </summary>
-
-            
             this._setDefaults();
         },
 
@@ -88,24 +86,32 @@ define([
             this._el.remove();
         },
 
-        update: function (paper) {
+        update: function () {
             // child class should override this
-
+            this._el.attr("fill", this.color);
+            this._el.attr("fill-opacity", this.opacity);
+            this._el.attr('stroke', this.lineColor);
+            this._el.attr('stroke-opacity', this.lineOpacity);
+            this._el.attr('stroke-width', this.lineThickness);
         },
 
         bindMouseEvents: function () {
-        	/// <summary>
+            /// <summary>
             /// Binds mouse events on raphael element if it exists
-        	/// bind: mouseup, mousedown, mouseover, mouseout, mousemove
+            /// bind: mouseup, mousedown, mouseover, mouseout, mousemove
             /// </summary>
-            
+
             if (typeof this._el == 'undefined') {
                 return;
             }
 
             _.extend(this, Backbone.Events);
-            
+
             var self = this;
+
+            this._el.click(function () {
+                self.trigger("click", self);
+            });
 
             this._el.mouseup(function () {
                 self.trigger("mouseup", self);

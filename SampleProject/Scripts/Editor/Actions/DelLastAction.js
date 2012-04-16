@@ -4,16 +4,16 @@ define([
   'underscore',
   'backbone',
 ], function ($, _, Backbone) {
-    var DelRectAction = function (collection) {
+    var DelLastAction = function (collection) {
         /// <summary>
-        /// Deletes last added rectangle model from the collection inside model
+        /// Deletes last added element from the collection
         /// </summary>
 
         this.collection = collection;
 
     };
 
-    DelRectAction.prototype.execute = function () {
+    DelLastAction.prototype.execute = function () {
         /// <summary>
         /// Deletes last added rectangle
         /// </summary>
@@ -22,5 +22,5 @@ define([
         return true;
     };
 
-    return DelRectAction;
+    return DelLastAction;
 });

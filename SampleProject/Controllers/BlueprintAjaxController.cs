@@ -93,37 +93,37 @@ namespace SampleProject.Controllers
         public ActionResult Http200()
         {
             Response.StatusCode = 200;
-            return Content("OK.", "text/plain");
+            return Content("", "text/plain");
         }
 
         /// <summary>
         /// Http: Forbidden
         /// </summary>
         /// <returns></returns>
-        public ActionResult Http403()
+        public ActionResult Http403(string message)
         {
             Response.StatusCode = 403;
-            return Content("Forbidden.", "text/plain");
+            return Content(message, "text/plain");
         }
 
         /// <summary>
         /// Http: Bad request
         /// </summary>
         /// <returns></returns>
-        public ActionResult Http400()
+        public ActionResult Http400(string message)
         {
             Response.StatusCode = 400;
-            return Content("Bad request", "text/plain");
+            return Content(message, "text/plain");
         }
 
         /// <summary>
         /// Http: Not found
         /// </summary>
         /// <returns></returns>
-        public ActionResult Http404()
+        public ActionResult Http404(string message)
         {
             Response.StatusCode = 404;
-            return Content("Not found", "text/plain");
+            return Content(message, "text/plain");
         }
 
         #endregion
@@ -149,16 +149,12 @@ namespace SampleProject.Controllers
         [HttpPost]
         public ActionResult Create(BlueprintJsonModel model)
         {
-            //check if model is valid
-            if (!IsModelValid()) return Http400();
+            var user = _store.GetApiKeyOwner(GetApiKey());
+            if (user == null) return Http403("Unknown API key.");
 
-            var apiKey = GetApiKey();
-            var user = _store.GetApiKeyOwner(apiKey);
-            if (user == null)
-            {
-                _logger.Error("There is no owner of the key: " + apiKey);
-                return Http400();
-            }
+            //check if model is valid
+            if (!IsModelValid()) return Http400("Invalid blueprint data.");
+
             // map data from the view model to the db model
             var blueprint = new Blueprint { Name = model.Name, Description = model.Description, JsonData = model.JsonData, Changed = DateTime.Now };
 
@@ -181,11 +177,9 @@ namespace SampleProject.Controllers
         [HttpGet]
         public ActionResult Read(int id)
         {
-            // check api key
-            //if (!IsApiKeyValid()) return Http403();
 
             var blueprint = _blueprints.GetBlueprintById(id);
-            if (blueprint == null) return Http404();
+            if (blueprint == null) return Http404("Blueprint not found.");
 
             var viewModel = new BlueprintJsonModel
             {
@@ -205,13 +199,13 @@ namespace SampleProject.Controllers
         {
             var user = _store.GetApiKeyOwner(GetApiKey());
 
-            if (user == null) return Http403();
+            if (user == null) return Http403("Unknown API key.");
 
             var blueprint = _blueprints.GetBlueprintById(id);
-            if (blueprint == null) return Http404();
+            if (blueprint == null) return Http404("Blueprint not found.");
 
             // updating model isn't allowed for this api key
-            if (user.UserId != blueprint.UserId) return Http403();
+            if (user.UserId != blueprint.UserId) return Http403("This model can't be updated with this API key.");
 
             blueprint.Name = model.Name;
             blueprint.Description = model.Description;
