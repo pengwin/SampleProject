@@ -76,7 +76,7 @@ namespace SampleProject.Controllers
             if (!ModelState.IsValid)
             {
                 var errors = FetchModelError();
-                _logger.Error("Blueprint create model errors: " + errors);
+                _logger.Error("Blueprint model validation errors: " + errors);
                 return false;
             }
             return true;
@@ -156,7 +156,14 @@ namespace SampleProject.Controllers
             if (!IsModelValid()) return Http400("Invalid blueprint data.");
 
             // map data from the view model to the db model
-            var blueprint = new Blueprint { Name = model.Name, Description = model.Description, JsonData = model.JsonData, Changed = DateTime.Now };
+            var blueprint = new Blueprint
+                                {
+                                    Name = model.Name,
+                                    Description = model.Description,
+                                    JsonData = model.JsonData,
+                                    VectorPreview = model.PreviewData,
+                                    Changed = DateTime.Now
+                                };
 
             // put the blueprint to the db
             _blueprints.CreateBlueprintForUser(user.UserId, blueprint);
@@ -186,7 +193,8 @@ namespace SampleProject.Controllers
                 id = id,
                 Name = blueprint.Name,
                 Description = blueprint.Description,
-                JsonData = blueprint.JsonData
+                JsonData = blueprint.JsonData,
+                PreviewData = blueprint.VectorPreview
             };
 
             return Json(viewModel, JsonRequestBehavior.AllowGet);
@@ -210,6 +218,7 @@ namespace SampleProject.Controllers
             blueprint.Name = model.Name;
             blueprint.Description = model.Description;
             blueprint.JsonData = model.JsonData;
+            blueprint.VectorPreview = model.PreviewData;
             blueprint.Changed = DateTime.Now;
 
             _blueprints.SaveChanges();

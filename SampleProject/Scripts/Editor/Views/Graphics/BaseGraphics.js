@@ -17,10 +17,10 @@ define([
             this.y = 0;
             this.width = 1;
             this.height = 1;
-            this.color = 'black';
+            this.color = 'cornflowerblue';
             this.opacity = 0.5;
             this.lineThickness = 1;
-            this.lineColor = 'black';
+            this.lineColor = 'cornflowerblue';
             this.lineOpacity = 1;
         },
 

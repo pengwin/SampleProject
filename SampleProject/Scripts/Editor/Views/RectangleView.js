@@ -7,7 +7,7 @@ define([
         'backbone',
         'views/baseview',
         'views/graphics/rectanglegraphics'
-    ], function ($, _, Backbone, BaseView,RectangleGraphics) {
+    ], function ($, _, Backbone, BaseView, RectangleGraphics) {
 
         var RectangleView = BaseView.extend({
 
@@ -15,7 +15,7 @@ define([
                 this.graphics = new RectangleGraphics();
             },
             initNavbar: function () {
-                this.navbar = this.make("a", {id: "btnEdit" });
+                this.navbar = this.make("a", { id: "btnEdit" });
                 $(this.navbar).html("Rectangle");
             }
         });

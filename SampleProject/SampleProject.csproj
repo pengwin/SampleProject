@@ -191,6 +191,7 @@
     <Content Include="Scripts\Editor\Actions\AddEllipseAction.js" />
     <Content Include="Scripts\Editor\Actions\DeleteAction.js" />
     <Content Include="Scripts\Editor\Actions\DelLastAction.js" />
+    <Content Include="Scripts\Editor\Actions\DrawAction.js" />
     <Content Include="Scripts\Editor\Actions\ResizeAction.js" />
     <Content Include="Scripts\Editor\Actions\EditAction.js" />
     <Content Include="Scripts\Editor\Actions\MoveAction.js" />
@@ -198,6 +199,7 @@
     <Content Include="Scripts\Editor\Controllers\CanvasController.js" />
     <Content Include="Scripts\Editor\Controllers\BaseController.js" />
     <Content Include="Scripts\Editor\Controllers\ElementController.js" />
+    <Content Include="Scripts\Editor\Controllers\ElementsController.js" />
     <Content Include="Scripts\Editor\main.js" />
     <Content Include="Scripts\Editor\Models\ElementModel.js" />
     <Content Include="Scripts\Editor\Models\CanvasModel.js" />
@@ -227,7 +229,7 @@
     <Content Include="Scripts\Lib\jQuery\jquery-1.7.1.js" />
     <Content Include="Scripts\Lib\QUnit\qunit.js" />
     <Content Include="Scripts\Lib\Raphael\eve.js" />
-    <Content Include="Scripts\Lib\Raphael\raphael.js" />
+    <Content Include="Scripts\Lib\Raphael\raphael-amd.js" />
     <Content Include="Scripts\Lib\require\order.js" />
     <Content Include="Scripts\Lib\require\require.js" />
     <Content Include="Scripts\Lib\require\text.js" />

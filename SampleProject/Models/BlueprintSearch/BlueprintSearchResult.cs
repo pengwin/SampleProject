@@ -6,6 +6,10 @@ using SampleProject.Models.BlueprintModels;
 
 namespace SampleProject.Models.BlueprintSearch
 {
+    /// <summary>
+    /// Blueprint search result entity.
+    /// Stores query patterns and results;
+    /// </summary>
     public class BlueprintSearchResult
     {
         public int BlueprintId { get; set; }
@@ -16,8 +20,18 @@ namespace SampleProject.Models.BlueprintSearch
 
         public SearchResult AuthorResult { get; private set; }
 
+        /// <summary>
+        /// Value to sort results.
+        /// </summary>
         public int SearchScore { get; private set; }
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="namePattern"></param>
+        /// <param name="descrPattern"></param>
+        /// <param name="authorPattern"></param>
+        /// <param name="blueprint"></param>
         public BlueprintSearchResult(string namePattern, string descrPattern, string authorPattern, Blueprint blueprint)
         {
             BlueprintId = blueprint.BlueprintId;

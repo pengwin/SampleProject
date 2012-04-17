@@ -27,6 +27,11 @@ namespace SampleProject.Models.BlueprintSearch
         /// </summary>
         public int MatchesCount { get; private set; }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="value">parameter value</param>
+        /// <param name="pattern">pattern for searching</param>
         public SearchResult(string value, string pattern)
         {
             Value = value;

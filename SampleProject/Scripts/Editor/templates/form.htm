@@ -1,7 +1,8 @@
 ﻿<div class="modal-header">
     <h3><%= caption %></h3>
 </div>
-<div id="form_content" class="modal-body">
+<div  class="modal-body">
+<div id="form_content" class="modal-form">
     <p id="err_message"></p>
 
     <% for (var i = 0; i < modelKeys.length; i++) { %>
@@ -13,6 +14,7 @@
     <% } %>
     <% } %>
 
+</div>
 </div>
 <div class="modal-footer">
     <button id="submit" class="btn btn-primary">Save changes</button>

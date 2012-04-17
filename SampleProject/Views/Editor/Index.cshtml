@@ -1,7 +1,7 @@
 ﻿@using SampleProject.HtmlHelpers
 @model SampleProject.ViewModels.Editor.IndexViewModel
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Editor";
 }
 @section scripts
 {
@@ -50,12 +50,38 @@
 
 <div id="error_modal" class="hide modal">
     <div class="modal-header">
-         <a class="close" data-dismiss="modal">×</a>
+        <a class="close" data-dismiss="modal">×</a>
         <h3>Error</h3>
     </div>
     <div class="modal-body">
         <div id="error_content"class="alert alert-error">
             
         </div>   
+    </div>
+</div>
+
+<div id="login_modal" class="hide modal">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>Please login</h3>
+    </div>
+    <div class="modal-body">
+        <p>Save operation is available only for authorized users.</p>
+    </div>
+    <div class="modal-footer">
+        <a class="btn btn-primary btn-large" href="@Url.Action("Login","User")">Login</a> 
+    </div>
+</div>
+
+<div id="save_new_modal" class="hide modal">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">×</a>
+        <h3>Save new</h3>
+    </div>
+    <div class="modal-body">
+        <p>You can't edit this model. But you can save the copy to your blueprints collection.</p>
+    </div>
+    <div class="modal-footer">
+        <button id="btnSaveNew" class="btn btn-primary">Copy</button>
     </div>
 </div>

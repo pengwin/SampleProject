@@ -20,6 +20,9 @@ namespace SampleProject.Controllers
         public string Message { get; set; }
     }
 
+    /// <summary>
+    /// Shows editor application page.
+    /// </summary>
     public class EditorController : BaseController
     {
         /// <summary>

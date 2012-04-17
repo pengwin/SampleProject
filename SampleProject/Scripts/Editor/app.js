@@ -2,9 +2,12 @@
 define(['jquery',
         'backbone',
         'models/blueprintmodel',
+        'models/rectanglemodel',
+        'models/ellipsemodel',
         'controllers/basecontroller',
         'controllers/canvascontroller',
         'controllers/elementcontroller',
+        'controllers/elementscontroller',
         'views/blueprintview',
         'views/toolbarview',
         'views/canvasview',
@@ -12,11 +15,12 @@ define(['jquery',
         'views/ellipseview',
         'actions/addrectaction',
         'actions/addellipseaction',
-        'actions/dellastaction'
-    ], function ($, Backbone, BlueprintModel,
-                 BaseController, CanvasController, ElementController, //controllers
+        'actions/dellastaction',
+        'actions/drawaction'
+    ], function ($, Backbone, BlueprintModel, RectangleModel, EllipseModel, // models
+                 BaseController, CanvasController, ElementController, ElementsController, //controllers
                  BlueprintView, ToolbarView, CanvasView, RectangleView, EllipseView, // views
-                 AddRectAction, AddEllipseAction, DelLastAction) //actions
+                 AddRectAction, AddEllipseAction, DelLastAction, DrawAction) //actions
     {
 
         var AppController = Backbone.Router.extend({
@@ -35,9 +39,6 @@ define(['jquery',
                 this.initControllers();
                 this.initActions();
                 this.bindHandlers();
-
-                this.elementsViews = [];
-                this.elementsControllers = [];
 
                 this.start();
             },
@@ -73,9 +74,15 @@ define(['jquery',
                     model: this.blueprint,
                     view: this.blueprintView,
                     formCaption: "Blueprint",
-                    modelExcludedFields: ["JsonData"]
+                    modelExcludedFields: ["JsonData","PreviewData"]
                 });
                 this.canvasController = new CanvasController({ model: this.blueprint.canvas, view: this.canvasView });
+                this.elementsController = new ElementsController({
+                    elements: this.blueprint.elements,
+                    view: this.blueprintView,
+                    paper: this.canvasView.graphics.paper(),
+                    clickState: this.toolbarView.clickState
+                });
             },
 
             initActions: function () {
@@ -85,65 +92,12 @@ define(['jquery',
                 this.addRectAction = new AddRectAction(this.blueprint.elements);
                 this.delLastAction = new DelLastAction(this.blueprint.elements);
                 this.addEllipseAction = new AddEllipseAction(this.blueprint.elements);
-            },
-
-            addElement: function (model) {
-                /// <summary>
-                /// Adds element to current workspace
-                /// </summary>
-                /// <param name="model"></param>
-                var view;
-                var viewCaption = "";
-                // get view
-                if (model.get('type') == 'rectangle') {
-                    view = this.addRectangleView();
-                    viewCaption = "Rectangle";
-                }
-                if (model.get('type') == 'ellipse') {
-                    view = this.addEllipseView(model);
-                    viewCaption = "Ellipse";
-                }
-                // if no match exit func
-                if (typeof view == 'undefined') return;
-                var self = this;
-                view.renderGraphics(this.canvasView.graphics.paper());
-                view.update(model.toJSON());
-                this.elementsViews.push(view);
-                view.on('removed', function (sender) {
-                    self.elementsViews.pop(sender);
-                });
-                var controller = new ElementController({ model: model, view: view, formCaption: viewCaption,clickState: this.toolbarView.clickState });
-                this.elementsControllers.push(controller);
-                controller.on('removed', function (sender) {
-                    self.elementsControllers.pop(sender);
-                });
-            },
-
-            addRectangleView: function () {
-                var view = new RectangleView();
-                this.blueprintView.addToRectangles(view.navbar);
-                return view;
-            },
-            addEllipseView: function () {
-                var view = new EllipseView();
-                this.blueprintView.addToEllipses(view.navbar);
-                return view;
+                this.drawRectAction = new DrawAction(this.blueprint.elements, RectangleModel);
+                this.drawEllipseAction = new DrawAction(this.blueprint.elements, EllipseModel);
             },
 
             bindHandlers: function () {
                 var self = this;
-
-                this.blueprint.elements.on('add', function (model) {
-                    self.addElement(model);
-                });
-                this.blueprint.elements.on('remove', function (model) {
-                    model.destroy();
-                });
-                this.blueprint.elements.on('reset', function (collection) {
-                    collection.each(function (element) {
-                        self.addElement(element);
-                    });
-                });
 
                 this.toolbarView.on('save_request', function () {
                     self.saveModel();
@@ -160,22 +114,75 @@ define(['jquery',
                 this.toolbarView.on('del_last_request', function () {
                     self.delLastAction.execute();
                 });
+                this.canvasView.on('graphics_click', function () {
+                    if (self.toolbarView.clickState.drawRect) {
+                        self.drawRectAction.execute();
+                    }
+                    if (self.toolbarView.clickState.drawEllipse) {
+                        self.drawEllipseAction.execute();
+                    }
+                });
+                this.canvasView.on('graphics_mousemove', function (position) {
+                    self.drawRectAction.setPosition(position);
+                    self.drawEllipseAction.setPosition(position);
+                });
+
+                $("#btnSaveNew").click(function () {
+                    self.saveNew();
+                });
+            },
+
+            makePreview: function () {
+                /// <summary>
+                /// Gets svg from the page 
+                /// </summary>
+
+                return $("#canvas").html();
+            },
+
+            saveNew: function () {
+            	/// <summary>
+            	/// Saves the copy of the blueprint.
+            	/// </summary>
+                this.blueprint.unset('id');
+                this.saveModel();
             },
 
             saveModel: function () {
+            	/// <summary>
+            	/// Saves the model.
+            	/// </summary>
                 var self = this;
+
+                var strPreview = this.makePreview();
+
+                this.blueprint.set('PreviewData', strPreview);
+
                 this.blueprint.save({}, {
                     success: function (model, response) {
+                        var url = "" + self.blueprint.get('id');
+                        self.navigate(url, { trigger: false, replace: true });
                         self.toolbarView.setReadyState();
                     },
                     error: function (model, response) {
-                        $("#error_modal #error_content").html("Error occurred while model saving: " + response.responseText);
-                        $("#error_modal").modal('show');
+                        if (response.responseText == "Unknown API key.") {
+                            $("#login_modal").modal('show');
+                        } else if (response.responseText == "This model can't be updated with this API key.") {
+                            $("#save_new_modal").modal('show');
+                        } else {
+                            $("#error_modal #error_content").html("Error occurred while model saving: " + response.responseText);
+                            $("#error_modal").modal('show');
+                        }
+
                     }
                 });
             },
 
             loadModel: function (id) {
+            	/// <summary>
+            	/// Fetches model from server.
+            	/// </summary>
+            	/// <param name="id"></param>
                 var self = this;
                 if (typeof id != 'undefined') {
                     this.blueprint.set('id', id);

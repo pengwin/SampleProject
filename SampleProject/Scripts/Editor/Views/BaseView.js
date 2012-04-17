@@ -155,6 +155,7 @@ define([
                 /// <param name="paper"></param>
                 if (typeof this.graphics == 'undefined') return;
                 this.graphics.renderOnPaper(paper);
+                var attrs = this.graphics._el.attr();
             },
             updateInfobar: function (attrs) {
                 /// <summary>

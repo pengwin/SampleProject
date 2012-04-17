@@ -21,7 +21,8 @@ define([
             defaults: {
                 Name: '',
                 Description: '',
-                JsonData: "{}"
+                JsonData: "{}",
+                PreviewData: "[]"
             },
 
             initialize: function () {

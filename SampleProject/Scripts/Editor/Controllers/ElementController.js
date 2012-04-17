@@ -1,5 +1,5 @@
-﻿// RectangleController module
-// controller set the link between rectangle model and rectangle view
+﻿// ElementController module
+// controller set the link between element model and view
 
 define([
         'jquery',

@@ -29,12 +29,12 @@ define([
                 color: 'white',
 
                 borderThickness: 4,
-                borderColor: 'black',
+                borderColor: 'blue',
                 borderOpacity: 1,
 
                 gridThickness: 0.5,
                 gridOpacity: 0.5,
-                gridColor: 'black',
+                gridColor: 'blue',
 
 
                 assetsLineThickness: 4,

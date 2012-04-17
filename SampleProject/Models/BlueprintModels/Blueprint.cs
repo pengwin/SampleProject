@@ -26,8 +26,14 @@ namespace SampleProject.Models.BlueprintModels
 
         public virtual User User { get; set; }
 
+        /// <summary>
+        /// SVG picture
+        /// </summary>
         public virtual string VectorPreview { get; set; }
 
+        /// <summary>
+        /// Stringified json data for editor application.
+        /// </summary>
         public virtual string JsonData { get; set; }
 
     }

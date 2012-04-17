@@ -12,7 +12,7 @@ using SampleProject.ViewModels.Browser;
 namespace SampleProject.Controllers
 {
     /// <summary>
-    /// Provides blueprints browsing and search.
+    /// Provides blueprints search.
     /// </summary>
     public class BrowserController : Controller
     {

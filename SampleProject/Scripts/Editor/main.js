@@ -7,7 +7,7 @@ require.config({
         underscore: '../Lib/Underscore/underscore-amd',
         backbone: '../Lib/Backbone/backbone-amd',
         eve: '../Lib/Raphael/eve',
-        raphael: '../Lib/Raphael/raphael',
+        raphael: '../Lib/Raphael/raphael-amd',
 
         // Require.js plugins
         text: '../Lib/require/text',

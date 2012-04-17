@@ -20,6 +20,9 @@ using SampleProject.Common;
 
 namespace SampleProject.Controllers
 {
+    /// <summary>
+    /// Authenticates users and shows user profile.
+    /// </summary>
     public class UserController : BaseController
     {
         #region Consts
@@ -52,6 +55,7 @@ namespace SampleProject.Controllers
 
         /// <summary>
         /// GET: /User/
+        /// Show the profile page to an authorized user.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -60,17 +64,6 @@ namespace SampleProject.Controllers
         {
             var user = _users.GetUserById(UserInfo.UserId);
             return View(user);
-        }
-
-        /// <summary>
-        /// GET: /User/
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public ActionResult Test()
-        {
-            return View();
         }
 
         #endregion

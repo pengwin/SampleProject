@@ -6,6 +6,9 @@ using System.Web.Mvc;
 
 namespace SampleProject.Controllers
 {
+    /// <summary>
+    /// Shows start page.
+    /// </summary>
     public class HomeController : Controller
     {
         //

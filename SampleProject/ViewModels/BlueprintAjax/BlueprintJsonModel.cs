@@ -11,6 +11,8 @@ namespace SampleProject.ViewModels.BlueprintAjax
 
         public string Description { get; set; }
 
+        public string PreviewData { get; set; }
+
         public string JsonData{ get; set; }
     }
 }
