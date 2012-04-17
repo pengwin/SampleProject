@@ -6,8 +6,8 @@ Requirements:
  * VS 2010 SP1
  * ASP.NET MVC 3
 
- Frontend:
- ---------
+Frontend:
+---------
 * Design: twitter bootstrap
 * Framework: Backbone
 * Template rendering: Underscore
