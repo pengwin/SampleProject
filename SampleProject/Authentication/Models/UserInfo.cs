@@ -49,7 +49,6 @@ namespace SampleProject.Authentication.Models
         /// <returns>UserInfo created from User.</returns>
         public static UserInfo FromUser(User user)
         {
-            Contract.Requires<ArgumentNullException>(user != null);
 
             var roles = new List<string>();
             if (user.Roles != null)
@@ -80,7 +79,6 @@ namespace SampleProject.Authentication.Models
         /// <exception cref="ArgumentException">When string is not a serialized UserInfo string.</exception>
         public static UserInfo FromString(string user)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(user));
 
             var data = user.Split('|');
             if (data.Length != 6)
